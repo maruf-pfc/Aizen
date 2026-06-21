@@ -9,6 +9,7 @@ class NavigationState extends Equatable {
   final List<ModuleCategory> filteredCategories;
   final String searchQuery;
   final String? errorMessage;
+  final int activeIndex;
 
   const NavigationState({
     this.status = NavigationStatus.initial,
@@ -16,6 +17,7 @@ class NavigationState extends Equatable {
     this.filteredCategories = const [],
     this.searchQuery = '',
     this.errorMessage,
+    this.activeIndex = 0,
   });
 
   NavigationState copyWith({
@@ -24,6 +26,7 @@ class NavigationState extends Equatable {
     List<ModuleCategory>? filteredCategories,
     String? searchQuery,
     String? errorMessage,
+    int? activeIndex,
   }) {
     return NavigationState(
       status: status ?? this.status,
@@ -31,6 +34,7 @@ class NavigationState extends Equatable {
       filteredCategories: filteredCategories ?? this.filteredCategories,
       searchQuery: searchQuery ?? this.searchQuery,
       errorMessage: errorMessage ?? this.errorMessage,
+      activeIndex: activeIndex ?? this.activeIndex,
     );
   }
 
@@ -41,5 +45,6 @@ class NavigationState extends Equatable {
         filteredCategories,
         searchQuery,
         errorMessage,
+        activeIndex,
       ];
 }

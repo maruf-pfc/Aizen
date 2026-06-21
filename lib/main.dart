@@ -184,59 +184,59 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final baseDarkTheme = ThemeData.dark(useMaterial3: true);
-    return MaterialApp(
-      title: 'Aizen',
-      debugShowCheckedModeBanner: false,
-      theme: baseDarkTheme.copyWith(
-        scaffoldBackgroundColor: const Color(0xFF000000),
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF7C4DFF),
-          secondary: Color(0xFF00E676),
-          surface: Color(0xFF0C0C0C),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<StopwatchBloc>(
+          create: (context) => StopwatchBloc(
+            getStopwatchState: getStopwatchState,
+            saveStopwatchState: saveStopwatchState,
+            getLaps: getLaps,
+            saveLaps: saveLaps,
+            clearStopwatchData: clearStopwatchData,
+          ),
         ),
-        textTheme: GoogleFonts.lexendTextTheme(baseDarkTheme.textTheme),
-      ),
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider<StopwatchBloc>(
-            create: (context) => StopwatchBloc(
-              getStopwatchState: getStopwatchState,
-              saveStopwatchState: saveStopwatchState,
-              getLaps: getLaps,
-              saveLaps: saveLaps,
-              clearStopwatchData: clearStopwatchData,
-            ),
+        BlocProvider<DeviceInfoBloc>(
+          create: (context) => DeviceInfoBloc(
+            getHardwareInfo: getHardwareInfo,
+            getStorageInfo: getStorageInfo,
+            streamBatteryInfo: streamBatteryInfo,
           ),
-          BlocProvider<DeviceInfoBloc>(
-            create: (context) => DeviceInfoBloc(
-              getHardwareInfo: getHardwareInfo,
-              getStorageInfo: getStorageInfo,
-              streamBatteryInfo: streamBatteryInfo,
-            ),
+        ),
+        BlocProvider<TodoBloc>(
+          create: (context) => TodoBloc(
+            getTasks: getTasks,
+            saveTask: saveTask,
+            deleteTask: deleteTask,
+            parseNlpInput: parseNlpInput,
           ),
-          BlocProvider<TodoBloc>(
-            create: (context) => TodoBloc(
-              getTasks: getTasks,
-              saveTask: saveTask,
-              deleteTask: deleteTask,
-              parseNlpInput: parseNlpInput,
-            ),
+        ),
+        BlocProvider<NavigationBloc>(
+          create: (context) => NavigationBloc(),
+        ),
+        BlocProvider<SettingsBloc>(
+          create: (context) => SettingsBloc(
+            getSettings: getSettings,
+            saveSettings: saveSettings,
+            clearCache: clearCache,
+            optimizeDatabase: optimizeDatabase,
+            exportData: exportData,
+            importData: importData,
           ),
-          BlocProvider<NavigationBloc>(
-            create: (context) => NavigationBloc(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Aizen',
+        debugShowCheckedModeBanner: false,
+        theme: baseDarkTheme.copyWith(
+          scaffoldBackgroundColor: const Color(0xFF000000),
+          colorScheme: const ColorScheme.dark(
+            primary: Color(0xFF7C4DFF),
+            secondary: Color(0xFF00E676),
+            surface: Color(0xFF0C0C0C),
           ),
-          BlocProvider<SettingsBloc>(
-            create: (context) => SettingsBloc(
-              getSettings: getSettings,
-              saveSettings: saveSettings,
-              clearCache: clearCache,
-              optimizeDatabase: optimizeDatabase,
-              exportData: exportData,
-              importData: importData,
-            ),
-          ),
-        ],
-        child: const DashboardPage(),
+          textTheme: GoogleFonts.lexendTextTheme(baseDarkTheme.textTheme),
+        ),
+        home: const DashboardPage(),
       ),
     );
   }

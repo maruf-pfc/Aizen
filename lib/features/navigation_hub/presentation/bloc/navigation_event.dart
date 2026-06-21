@@ -28,3 +28,11 @@ class ToggleCategoryCollapseEvent extends NavigationEvent {
   @override
   List<Object?> get props => [categoryId];
 }
+
+class ChangeActiveIndexEvent extends NavigationEvent {
+  final int index;
+  const ChangeActiveIndexEvent(this.index);
+
+  @override
+  List<Object?> get props => [index];
+}

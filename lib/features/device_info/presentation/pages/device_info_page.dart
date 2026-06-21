@@ -9,6 +9,7 @@ import '../../domain/entities/storage_info.dart';
 import '../widgets/battery_info_panel.dart';
 import '../widgets/hardware_info_panel.dart';
 import '../widgets/storage_info_panel.dart';
+import '../widgets/franco_kernel_panel.dart';
 import '../../../navigation_hub/presentation/widgets/navigation_hub_drawer.dart';
 
 class DeviceInfoPage extends StatefulWidget {
@@ -160,6 +161,8 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
+                              const FrancoKernelPanel(),
+                              const SizedBox(height: 16),
                               batteryPanel,
                               storagePanel,
                             ],
@@ -175,6 +178,8 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                   child: Column(
                     children: [
                       hardwarePanel,
+                      const SizedBox(height: 16),
+                      const FrancoKernelPanel(),
                       const SizedBox(height: 16),
                       batteryPanel,
                       storagePanel,

@@ -25,6 +25,7 @@ class TaskRow extends StatelessWidget {
   }
 
   void _showEditTaskDialog(BuildContext context, Task task) {
+    final todoBloc = context.read<TodoBloc>();
     final titleController = TextEditingController(text: task.title);
     int selectedPriority = task.priority;
     DateTime? selectedDueDate = task.dueDate;
@@ -252,7 +253,7 @@ class TaskRow extends StatelessWidget {
                         tags: tagsList,
                       );
 
-                      dialogContext.read<TodoBloc>().add(UpdateTodoEvent(updatedTask));
+                      todoBloc.add(UpdateTodoEvent(updatedTask));
                       Navigator.of(dialogContext).pop();
                     }
                   },

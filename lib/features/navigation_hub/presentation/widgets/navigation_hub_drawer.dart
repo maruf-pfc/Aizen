@@ -6,6 +6,7 @@ import '../bloc/navigation_state.dart';
 import '../../domain/entities/navigation_item.dart';
 import '../../domain/entities/module_category.dart';
 import '../../../settings/presentation/pages/settings_page.dart';
+import '../../../focus_guardian/presentation/pages/app_blocker_page.dart';
 
 abstract class VisualNode {}
 
@@ -77,17 +78,17 @@ class _NavigationHubDrawerState extends State<NavigationHubDrawer> {
                   children: [
                     Icon(
                       Icons.search,
-                      size: 16,
+                      size: 18,
                       color: Colors.white.withValues(alpha: 0.4),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: TextField(
                         controller: _searchController,
-                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                        style: const TextStyle(color: Colors.white, fontSize: 14),
                         decoration: const InputDecoration(
-                          hintText: 'Search 50+ modules...',
-                          hintStyle: TextStyle(color: Color(0x66FFFFFF), fontSize: 12),
+                          hintText: 'Search active modules...',
+                          hintStyle: TextStyle(color: Color(0x66FFFFFF), fontSize: 14),
                           border: InputBorder.none,
                           isDense: true,
                           contentPadding: EdgeInsets.symmetric(vertical: 10.0),
@@ -134,110 +135,117 @@ class _NavigationHubDrawerState extends State<NavigationHubDrawer> {
                     itemBuilder: (context, index) {
                       final node = nodes[index];
                       if (node is HeaderNode) {
-                        final cat = node.category;
-                        return InkWell(
-                          onTap: () {
-                            context.read<NavigationBloc>().add(ToggleCategoryCollapseEvent(cat.id));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8.0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  cat.isCollapsed ? Icons.chevron_right : Icons.expand_more,
-                                  size: 14,
-                                  color: Colors.white.withValues(alpha: 0.4),
-                                ),
-                                const SizedBox(width: 6),
-                                Expanded(
-                                  child: Text(
-                                    cat.name.toUpperCase(),
-                                    style: TextStyle(
-                                      color: Colors.white.withValues(alpha: 0.5),
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w800,
-                                      letterSpacing: 0.5,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.05),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Text(
-                                    '${cat.items.length}',
-                                    style: TextStyle(
-                                      color: Colors.white.withValues(alpha: 0.4),
-                                      fontSize: 8,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      } else if (node is ItemNode) {
-                        final item = node.item;
-                        return InkWell(
-                          onTap: () {
-                            // Close drawer and display route alert
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Navigating to ${item.title}...'),
-                                duration: const Duration(seconds: 1),
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 24.0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  item.icon,
-                                  size: 14,
-                                  color: Colors.white.withValues(alpha: 0.7),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    item.title,
-                                    style: TextStyle(
-                                      color: Colors.white.withValues(alpha: 0.8),
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                ),
-                                if (item.badge != null)
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF7C4DFF).withValues(alpha: 0.2),
-                                      borderRadius: BorderRadius.circular(4),
-                                      border: Border.all(
-                                        color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      item.badge!,
-                                      style: const TextStyle(
-                                        color: Color(0xFF7C4DFF),
-                                        fontSize: 8,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  );
-                },
+        final cat = node.category;
+        return InkWell(
+          onTap: () {
+            context.read<NavigationBloc>().add(ToggleCategoryCollapseEvent(cat.id));
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+            child: Row(
+              children: [
+                Icon(
+                  cat.isCollapsed ? Icons.chevron_right : Icons.expand_more,
+                  size: 16,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    cat.name.toUpperCase(),
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.5),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    '${cat.items.length}',
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.4),
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      } else if (node is ItemNode) {
+        final item = node.item;
+        return InkWell(
+          onTap: () {
+            Navigator.pop(context);
+            if (item.id == 'stopwatch') {
+              context.read<NavigationBloc>().add(const ChangeActiveIndexEvent(0));
+            } else if (item.id == 'quick_tasks') {
+              context.read<NavigationBloc>().add(const ChangeActiveIndexEvent(1));
+            } else if (item.id == 'device_specs') {
+              context.read<NavigationBloc>().add(const ChangeActiveIndexEvent(2));
+            } else if (item.id == 'app_blocker') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AppBlockerPage(),
+                ),
+              );
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 24.0),
+            child: Row(
+              children: [
+                Icon(
+                  item.icon,
+                  size: 20,
+                  color: Colors.white.withValues(alpha: 0.7),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    item.title,
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                if (item.badge != null)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF7C4DFF).withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
+                      ),
+                    ),
+                    child: Text(
+                      item.badge!,
+                      style: const TextStyle(
+                        color: Color(0xFF7C4DFF),
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      }
+      return const SizedBox.shrink();
+    },
+  );
+},
               ),
             ),
             // Bottom Settings Sticky Row
@@ -249,7 +257,7 @@ class _NavigationHubDrawerState extends State<NavigationHubDrawer> {
                   ),
                 ),
               ),
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(16),
               child: InkWell(
                 onTap: () {
                   Navigator.pop(context); // Close Drawer
@@ -264,23 +272,23 @@ class _NavigationHubDrawerState extends State<NavigationHubDrawer> {
                   children: [
                     const Icon(
                       Icons.settings_outlined,
-                      size: 16,
+                      size: 20,
                       color: Colors.white,
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 12),
                     const Expanded(
                       child: Text(
                         'Settings & Diagnostics',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 12,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
                     Icon(
                       Icons.arrow_forward_ios,
-                      size: 10,
+                      size: 12,
                       color: Colors.white.withValues(alpha: 0.3),
                     ),
                   ],

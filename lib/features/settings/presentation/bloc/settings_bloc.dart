@@ -7,6 +7,7 @@ import '../../domain/usecases/clear_cache.dart';
 import '../../domain/usecases/optimize_database.dart';
 import '../../domain/usecases/export_data.dart';
 import '../../domain/usecases/import_data.dart';
+import '../../../../core/services/focus_bridge_service.dart';
 import 'settings_event.dart';
 import 'settings_state.dart';
 
@@ -41,15 +42,25 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     emit(state.copyWith(status: SettingsStatus.loading));
     final res = await getSettings();
+    
+    final bridge = FocusBridgeService();
+    final usageGranted = await bridge.checkUsagePermission();
+    final overlayGranted = await bridge.checkOverlayPermission();
+
     if (res.$1 != null) {
       emit(state.copyWith(
         status: SettingsStatus.failure,
         errorMessage: res.$1!.message,
       ));
     } else {
+      final baseSettings = res.$2 ?? const GlobalSettings();
+      final updated = baseSettings.copyWith(
+        usageStatsGranted: usageGranted,
+        systemOverlayGranted: overlayGranted,
+      );
       emit(state.copyWith(
         status: SettingsStatus.success,
-        settings: res.$2 ?? const GlobalSettings(),
+        settings: updated,
       ));
     }
   }
@@ -78,15 +89,15 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     TogglePermissionEvent event,
     Emitter<SettingsState> emit,
   ) async {
+    final bridge = FocusBridgeService();
     final GlobalSettings updated;
+    
     if (event.permissionType == 'usageStats') {
-      updated = state.settings.copyWith(
-        usageStatsGranted: !state.settings.usageStatsGranted,
-      );
+      final granted = await bridge.checkUsagePermission();
+      updated = state.settings.copyWith(usageStatsGranted: granted);
     } else {
-      updated = state.settings.copyWith(
-        systemOverlayGranted: !state.settings.systemOverlayGranted,
-      );
+      final granted = await bridge.checkOverlayPermission();
+      updated = state.settings.copyWith(systemOverlayGranted: granted);
     }
 
     final res = await saveSettings(updated);
@@ -99,7 +110,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       emit(state.copyWith(
         status: SettingsStatus.success,
         settings: updated,
-        message: 'Permission diagnostics updated',
+        message: 'Permission status verified',
       ));
     }
   }
