@@ -93,5 +93,5 @@ docker run -d -p 8080:80 blackstart-labs/aizen:latest
 - **Collapsible Category Accordions**: Flat visual node tree representation using a single optimized `ListView.builder` for O(1) layout rendering and lazy resource usage.
 - **Diagnostics Panel**: Diagnostics checks for system-level overlay and usage statistics permissions, complete with simulated native intent triggers.
 - **Database Compaction**: Performance controls to purge cache directories, optimize db models, and export/import configuration payloads.
-- **Detailed Docs**: Refer to [Unified Navigation Workspace Specs](docs/features/navigation_hub.md) and [Advanced Settings Specs](docs/features/settings.md).
+- **Detailed Docs**: Refer to [Unified Navigation Workspace Specs](docs/features/navigation_hub.md), [Advanced Settings Specs](docs/features/settings.md), and [Focus Guardian Specs](docs/features/focus_guardian.md).
 

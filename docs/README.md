@@ -17,6 +17,7 @@ Welcome to the documentation vault for **Aizen**, a massive, local-first product
 - **[Quick Tasks (Todo) Module](features/todo.md) (v1.3.0)**: High-density minimalist task manager with local NLP parsing, slide gestures, and subtask hierarchy.
 - **[Unified Navigation Workspace](features/navigation_hub.md) (v1.4.0)**: Central drawer managing route filtering and accordion categories for 50+ modules.
 - **[Advanced Settings Hub](features/settings.md) (v1.4.0)**: Controls themes, permission diagnostics, cache compaction, and JSON imports/exports.
+- **[Focus Guardian Engine](features/focus_guardian.md) (v1.4.0)**: Native Android overlay projection and background app blocking.
 
 ---
 
