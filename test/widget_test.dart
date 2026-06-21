@@ -9,6 +9,11 @@ import 'package:Aizen/features/device_info/domain/usecases/stream_battery_info.d
 import 'package:Aizen/features/device_info/domain/entities/hardware_info.dart';
 import 'package:Aizen/features/device_info/domain/entities/storage_info.dart';
 import 'package:Aizen/features/device_info/domain/entities/battery_info.dart';
+import 'package:Aizen/features/todo/domain/entities/task.dart';
+import 'package:Aizen/features/todo/domain/usecases/get_tasks.dart';
+import 'package:Aizen/features/todo/domain/usecases/save_task.dart';
+import 'package:Aizen/features/todo/domain/usecases/delete_task.dart';
+import 'package:Aizen/features/todo/domain/usecases/parse_nlp_input.dart';
 import 'package:Aizen/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -22,6 +27,11 @@ class MockClearStopwatchData extends Mock implements ClearStopwatchData {}
 class MockGetHardwareInfo extends Mock implements GetHardwareInfo {}
 class MockGetStorageInfo extends Mock implements GetStorageInfo {}
 class MockStreamBatteryInfo extends Mock implements StreamBatteryInfo {}
+
+class MockGetTasks extends Mock implements GetTasks {}
+class MockSaveTask extends Mock implements SaveTask {}
+class MockDeleteTask extends Mock implements DeleteTask {}
+class MockParseNlpInput extends Mock implements ParseNlpInput {}
 
 // Dummy implementation for SaveStopwatchState to allow mocktail stubbing
 abstract class SaveSaveStopwatchState extends Mock implements SaveStopwatchState {}
@@ -37,6 +47,11 @@ void main() {
   late MockGetStorageInfo mockGetStorageInfo;
   late MockStreamBatteryInfo mockStreamBatteryInfo;
 
+  late MockGetTasks mockGetTasks;
+  late MockSaveTask mockSaveTask;
+  late MockDeleteTask mockDeleteTask;
+  late MockParseNlpInput mockParseNlpInput;
+
   setUp(() {
     mockGetStopwatchState = MockGetStopwatchState();
     mockSaveStopwatchState = MockSaveStopwatchState();
@@ -48,9 +63,15 @@ void main() {
     mockGetStorageInfo = MockGetStorageInfo();
     mockStreamBatteryInfo = MockStreamBatteryInfo();
 
+    mockGetTasks = MockGetTasks();
+    mockSaveTask = MockSaveTask();
+    mockDeleteTask = MockDeleteTask();
+    mockParseNlpInput = MockParseNlpInput();
+
     // Default stubbing
     when(() => mockGetStopwatchState()).thenAnswer((_) async => (null, null));
     when(() => mockGetLapsUsecase()).thenAnswer((_) async => (null, null));
+    when(() => mockGetTasks()).thenAnswer((_) async => (null, <Task>[]));
 
     when(() => mockGetHardwareInfo()).thenAnswer(
       (_) async => (
@@ -100,6 +121,10 @@ void main() {
         getHardwareInfo: mockGetHardwareInfo,
         getStorageInfo: mockGetStorageInfo,
         streamBatteryInfo: mockStreamBatteryInfo,
+        getTasks: mockGetTasks,
+        saveTask: mockSaveTask,
+        deleteTask: mockDeleteTask,
+        parseNlpInput: mockParseNlpInput,
       ),
     );
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../device_info/presentation/pages/device_info_page.dart';
 import '../../../stopwatch/presentation/pages/stopwatch_page.dart';
+import '../../../todo/presentation/pages/todo_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -12,19 +13,15 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    const StopwatchPage(),
-    const DeviceInfoPage(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF000000),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
+      body: _currentIndex == 0
+          ? const StopwatchPage()
+          : _currentIndex == 1
+              ? const TodoPage()
+              : const DeviceInfoPage(),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           border: Border(
@@ -52,6 +49,11 @@ class _DashboardPageState extends State<DashboardPage> {
               icon: Icon(Icons.timer_outlined, size: 20),
               activeIcon: Icon(Icons.timer, size: 20),
               label: 'Stopwatch',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.playlist_add_check, size: 20),
+              activeIcon: Icon(Icons.task_alt, size: 20),
+              label: 'Tasks',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.info_outline, size: 20),
