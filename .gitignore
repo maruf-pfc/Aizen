@@ -20,7 +20,6 @@
 
 # Build artifacts
 build/
-assets/
 *.apk
 *.aab
 *.ipa
