@@ -10,6 +10,8 @@ abstract class DeviceInfoEvent extends Equatable {
 
 class LoadDeviceInfoEvent extends DeviceInfoEvent {}
 
+class PauseBatteryTrackingEvent extends DeviceInfoEvent {}
+
 class BatteryUpdatedEvent extends DeviceInfoEvent {
   final BatteryInfo batteryInfo;
 

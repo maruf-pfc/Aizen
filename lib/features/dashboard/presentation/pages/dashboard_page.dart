@@ -12,19 +12,11 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    const StopwatchPage(),
-    const DeviceInfoPage(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF000000),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
+      body: _currentIndex == 0 ? const StopwatchPage() : const DeviceInfoPage(),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           border: Border(

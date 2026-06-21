@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/device_info_bloc.dart';
 import '../bloc/device_info_event.dart';
 import '../bloc/device_info_state.dart';
+import '../../domain/entities/hardware_info.dart';
+import '../../domain/entities/battery_info.dart';
+import '../../domain/entities/storage_info.dart';
 import '../widgets/battery_info_panel.dart';
 import '../widgets/hardware_info_panel.dart';
 import '../widgets/storage_info_panel.dart';
@@ -19,6 +22,12 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
   void initState() {
     super.initState();
     context.read<DeviceInfoBloc>().add(LoadDeviceInfoEvent());
+  }
+
+  @override
+  void dispose() {
+    context.read<DeviceInfoBloc>().add(PauseBatteryTrackingEvent());
+    super.dispose();
   }
 
   @override
@@ -48,6 +57,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
         ],
       ),
       body: BlocBuilder<DeviceInfoBloc, DeviceInfoState>(
+        buildWhen: (previous, current) => previous.status != current.status,
         builder: (context, state) {
           if (state.status == DeviceInfoStatus.loading || state.status == DeviceInfoStatus.initial) {
             return const Center(
@@ -90,22 +100,37 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
             );
           }
 
-          final hw = state.hardwareInfo;
-          final bt = state.batteryInfo;
-          final st = state.storageInfo;
-
-          if (hw == null || st == null) {
-            return Center(
-              child: Text(
-                'No device specifications found.',
-                style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
-              ),
-            );
-          }
-
           return LayoutBuilder(
             builder: (context, constraints) {
-              if (constraints.maxWidth >= 720) {
+              final isWide = constraints.maxWidth >= 720;
+
+              final hardwarePanel = BlocSelector<DeviceInfoBloc, DeviceInfoState, HardwareInfo?>(
+                selector: (state) => state.hardwareInfo,
+                builder: (context, hw) {
+                  return hw != null ? HardwareInfoPanel(info: hw) : const SizedBox.shrink();
+                },
+              );
+
+              final batteryPanel = BlocSelector<DeviceInfoBloc, DeviceInfoState, BatteryInfo?>(
+                selector: (state) => state.batteryInfo,
+                builder: (context, bt) {
+                  return bt != null
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: BatteryInfoPanel(info: bt),
+                        )
+                      : const SizedBox.shrink();
+                },
+              );
+
+              final storagePanel = BlocSelector<DeviceInfoBloc, DeviceInfoState, StorageInfo?>(
+                selector: (state) => state.storageInfo,
+                builder: (context, st) {
+                  return st != null ? StorageInfoPanel(info: st) : const SizedBox.shrink();
+                },
+              );
+
+              if (isWide) {
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
@@ -114,7 +139,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                       Expanded(
                         flex: 5,
                         child: SingleChildScrollView(
-                          child: HardwareInfoPanel(info: hw),
+                          child: hardwarePanel,
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -123,11 +148,8 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              if (bt != null) ...[
-                                BatteryInfoPanel(info: bt),
-                                const SizedBox(height: 16),
-                              ],
-                              StorageInfoPanel(info: st),
+                              batteryPanel,
+                              storagePanel,
                             ],
                           ),
                         ),
@@ -140,13 +162,10 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      HardwareInfoPanel(info: hw),
+                      hardwarePanel,
                       const SizedBox(height: 16),
-                      if (bt != null) ...[
-                        BatteryInfoPanel(info: bt),
-                        const SizedBox(height: 16),
-                      ],
-                      StorageInfoPanel(info: st),
+                      batteryPanel,
+                      storagePanel,
                     ],
                   ),
                 );

@@ -111,4 +111,33 @@ void main() {
       ),
     ],
   );
+
+  blocTest<DeviceInfoBloc, DeviceInfoState>(
+    'should cancel stream when PauseBatteryTrackingEvent is added',
+    build: () {
+      when(() => mockGetHardwareInfo()).thenAnswer((_) async => (null, tHardwareInfo));
+      when(() => mockGetStorageInfo()).thenAnswer((_) async => (null, tStorageInfo));
+      when(() => mockStreamBatteryInfo()).thenAnswer((_) => Stream.value(tBatteryInfo));
+      return bloc;
+    },
+    act: (bloc) async {
+      bloc.add(LoadDeviceInfoEvent());
+      await Future.delayed(const Duration(milliseconds: 10));
+      bloc.add(PauseBatteryTrackingEvent());
+    },
+    expect: () => [
+      const DeviceInfoState(status: DeviceInfoStatus.loading),
+      const DeviceInfoState(
+        status: DeviceInfoStatus.success,
+        hardwareInfo: tHardwareInfo,
+        storageInfo: tStorageInfo,
+      ),
+      const DeviceInfoState(
+        status: DeviceInfoStatus.success,
+        hardwareInfo: tHardwareInfo,
+        storageInfo: tStorageInfo,
+        batteryInfo: tBatteryInfo,
+      ),
+    ],
+  );
 }

@@ -19,6 +19,9 @@ class DeviceInfoLocalDataSourceImpl implements DeviceInfoLocalDataSource {
   final DeviceInfoPlugin deviceInfoPlugin;
   final Battery battery;
 
+  final io.File _batteryTempFile = io.File('/sys/class/power_supply/battery/temp');
+  final io.File _memInfoFile = io.File('/proc/meminfo');
+
   DeviceInfoLocalDataSourceImpl({
     required this.deviceInfoPlugin,
     required this.battery,
@@ -179,9 +182,8 @@ class DeviceInfoLocalDataSourceImpl implements DeviceInfoLocalDataSource {
 
   Future<double?> _readAndroidBatteryTemp() async {
     try {
-      final file = io.File('/sys/class/power_supply/battery/temp');
-      if (await file.exists()) {
-        final content = await file.readAsString();
+      if (await _batteryTempFile.exists()) {
+        final content = await _batteryTempFile.readAsString();
         final rawTemp = double.tryParse(content.trim());
         if (rawTemp != null) {
           return rawTemp / 10.0;
@@ -194,9 +196,8 @@ class DeviceInfoLocalDataSourceImpl implements DeviceInfoLocalDataSource {
   Future<int> _getTotalRam() async {
     try {
       if (io.Platform.isLinux || io.Platform.isAndroid) {
-        final file = io.File('/proc/meminfo');
-        if (await file.exists()) {
-          final lines = await file.readAsLines();
+        if (await _memInfoFile.exists()) {
+          final lines = await _memInfoFile.readAsLines();
           for (final line in lines) {
             if (line.startsWith('MemTotal:')) {
               final match = RegExp(r'\d+').firstMatch(line);

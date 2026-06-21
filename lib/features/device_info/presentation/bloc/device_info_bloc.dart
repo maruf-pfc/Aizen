@@ -20,6 +20,7 @@ class DeviceInfoBloc extends Bloc<DeviceInfoEvent, DeviceInfoState> {
     required this.streamBatteryInfo,
   }) : super(const DeviceInfoState()) {
     on<LoadDeviceInfoEvent>(_onLoadDeviceInfo);
+    on<PauseBatteryTrackingEvent>(_onPauseBatteryTracking);
     on<BatteryUpdatedEvent>(_onBatteryUpdated);
   }
 
@@ -58,6 +59,14 @@ class DeviceInfoBloc extends Bloc<DeviceInfoEvent, DeviceInfoState> {
         add(BatteryUpdatedEvent(batteryInfo));
       },
     );
+  }
+
+  void _onPauseBatteryTracking(
+    PauseBatteryTrackingEvent event,
+    Emitter<DeviceInfoState> emit,
+  ) {
+    _batterySubscription?.cancel();
+    _batterySubscription = null;
   }
 
   void _onBatteryUpdated(
