@@ -97,7 +97,7 @@ docker run -d -p 8080:80 blackstart-labs/aizen:latest
 - **Detailed Docs**: Refer to [Unified Navigation Workspace Specs](docs/features/navigation_hub.md), [Advanced Settings Specs](docs/features/settings.md), and [Focus Guardian Specs](docs/features/focus_guardian.md).
 
 ### 5. Habit Builder Module (v1.5.0)
-- **Willpower Streak Engine**: Supports dual tracking modes: Automatic real-time count-up counter (days, hours, minutes, seconds elapsed clean since last reset) and Manual daily check-in logs.
+- **Habit Streak Engine**: Supports dual tracking modes: Automatic real-time count-up counter (days, hours, minutes, seconds elapsed clean since last reset) and Manual daily check-in logs.
 - **Gamified Level Progression**: Automatic progression tracking across 8 levels (Recruit to Iron Will) with dynamic progress bars and color-coded level badges.
 - **Failure Analysis Ledger**: High-density 365-day contribution grid (Active/Slipped/Missed drift map) and post-relapse micro-journaling entries analyzing trigger context, root causes, and severity.
 - **Android Home-Screen Widget**: Bridged dynamic home-screen widgets via MethodChannels, enabling real-time streak displays on the native launcher.

@@ -18,7 +18,7 @@ Welcome to the documentation vault for **Aizen**, a massive, local-first product
 - **[Unified Navigation Workspace](features/navigation_hub.md) (v1.4.1)**: Central drawer managing route filtering and accordion categories for 50+ modules with nested Scaffold support.
 - **[Advanced Settings Hub](features/settings.md) (v1.4.0)**: Controls themes, permission diagnostics, cache compaction, and JSON imports/exports.
 - **[Focus Guardian Engine](features/focus_guardian.md) (v1.4.0)**: Native Android overlay projection and background app blocking.
-- **[Habit Builder Module](features/habit_builder.md) (v1.5.0)**: Willpower streak and habit failure prevention engine with real-time ticking, level rankings, and relapse journaling bottom sheets.
+- **[Habit Builder Module](features/habit_builder.md) (v1.5.0)**: Habit streak and failure prevention engine with real-time ticking, level rankings, and relapse journaling bottom sheets.
 
 ---
 

@@ -1,6 +1,6 @@
 # Habit Builder Module (v1.5.0)
 
-The **Habit Builder** (formerly Willpower Ledger) module is a local-first, low-RAM habit-tracking and willpower-streak engine designed to prevent habit failure and assist users in self-discipline.
+The **Habit Builder** module is a local-first, low-RAM habit-tracking and streak engine designed to prevent habit failure and assist users in self-discipline.
 
 ---
 
