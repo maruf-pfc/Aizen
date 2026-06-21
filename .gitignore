@@ -1,0 +1,56 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.project
+.settings/
+
+# Tooling caches and generated files
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# Build artifacts
+build/
+*.apk
+*.aab
+*.ipa
+
+# Android local files
+android/local.properties
+android/key.properties
+android/app/local.properties
+android/app/src/main/res/raw/
+
+# iOS local files
+ios/.shared/
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+
+# IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.history/
+
+# Log files
+*.log
+
+# Environment variables
+.env
+.env.*

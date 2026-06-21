@@ -1,0 +1,99 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  validate-and-build:
+    name: Validate and Build (Flutter)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        flutter-version: '3.35.1'
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Run Static Analysis
+      run: flutter analyze
+
+    - name: Run Unit & Widget Tests
+      run: flutter test
+
+    - name: Build Web Application
+      run: flutter build web --release
+
+    - name: Build Universal APK
+      run: flutter build apk
+
+    - name: Build Split APKs (per ABI)
+      run: flutter build apk --split-per-abi
+
+    - name: Upload APK Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: aizen-apks
+        path: build/app/outputs/flutter-apk/*.apk
+
+    - name: Upload Web Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: aizen-web
+        path: build/web/
+
+    - name: Create Git Tag for Release
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1)
+        TAG="v${VERSION}+${{ github.run_number }}"
+        echo "RELEASE_TAG=$TAG" >> $GITHUB_ENV
+        echo "RELEASE_VERSION=v${VERSION}" >> $GITHUB_ENV
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git tag "$TAG"
+        git push origin "$TAG"
+
+    - name: Create GitHub Release with APKs
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ env.RELEASE_TAG }}
+        name: "Aizen ${{ env.RELEASE_VERSION }}"
+        body: |
+          ⚡ **Aizen ${{ env.RELEASE_VERSION }} — Automated Build**
+
+          Built from `main` branch commit `${{ github.sha }}`.
+
+          ### Downloads
+          - **`app-release.apk`** — Universal APK (all devices)
+          - **`app-arm64-v8a-release.apk`** — ARM64 (most modern phones)
+          - **`app-armeabi-v7a-release.apk`** — ARM32 (older devices)
+          - **`app-x86_64-release.apk`** — x86_64 (emulators)
+
+          ### Features Included
+          - Stopwatch Module (v1.0.0) with millisecond-precision tracking, background state survival, and tabular figures alignment.
+        draft: false
+        prerelease: false
+        files: build/app/outputs/flutter-apk/*.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
