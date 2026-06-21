@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'core/theme/aizen_theme.dart';
@@ -62,16 +61,35 @@ import 'features/habit_tracker/presentation/bloc/habit_bloc.dart';
 // Dashboard import
 import 'features/dashboard/presentation/pages/dashboard_page.dart';
 
+// v1.6.0 — Expense Tracker feature imports
+import 'features/expense_tracker/data/repositories/expense_repository_impl.dart';
+import 'features/expense_tracker/presentation/bloc/expense_bloc.dart';
+import 'features/expense_tracker/services/bill_notification_service.dart';
+
+// v1.6.0 — Clipboard Vault feature imports
+import 'features/clipboard/data/datasources/clipboard_local_data_source.dart';
+import 'features/clipboard/presentation/bloc/clipboard_bloc.dart';
+
+// v1.6.0 — Time Blocker feature imports
+import 'features/time_blocker/data/datasources/time_block_local_data_source.dart';
+import 'features/time_blocker/presentation/bloc/time_block_bloc.dart';
+
+// v1.6.0 — Focus Guardian App Blocker bloc
+import 'features/focus_guardian/presentation/bloc/app_blocker_bloc.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.light,
-    systemNavigationBarColor: Colors.black,
-    systemNavigationBarIconBrightness: Brightness.light,
-    systemNavigationBarDividerColor: Colors.transparent,
-  ));
+  // Force a translucent AMOLED-black system UI overlay with light icons
+  // across the entire app — purges any web-style bright status bars.
+  AizenTheme.applyAmoledSystemUIOverlay();
+
+  // Lock the app to portrait orientation for a consistent mobile feel —
+  // landscape is only supported in the stopwatch feature.
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   // Shared dependencies
   final sharedPreferences = await SharedPreferences.getInstance();
@@ -145,6 +163,19 @@ void main() async {
   final markHabitComplete = MarkHabitComplete(habitRepository);
   final resetHabitStreak = ResetHabitStreak(habitRepository);
 
+  // v1.6.0 — Expense Tracker feature wiring
+  final expenseRepository = ExpenseRepositoryImpl(
+    ExpenseLocalDataSource(sharedPreferences),
+  );
+  // Initialise the bill-pay notification channel eagerly.
+  await BillNotificationService.instance.init();
+
+  // v1.6.0 — Clipboard Vault feature wiring
+  final clipboardLocalDataSource = ClipboardLocalDataSource(sharedPreferences);
+
+  // v1.6.0 — Time Blocker feature wiring
+  final timeBlockLocalDataSource = TimeBlockLocalDataSource(sharedPreferences);
+
   runApp(
     MyApp(
       getStopwatchState: getStopwatchState,
@@ -170,6 +201,9 @@ void main() async {
       deleteHabit: deleteHabit,
       markHabitComplete: markHabitComplete,
       resetHabitStreak: resetHabitStreak,
+      expenseRepository: expenseRepository,
+      clipboardLocalDataSource: clipboardLocalDataSource,
+      timeBlockLocalDataSource: timeBlockLocalDataSource,
     ),
   );
 }
@@ -203,6 +237,11 @@ class MyApp extends StatelessWidget {
   final MarkHabitComplete markHabitComplete;
   final ResetHabitStreak resetHabitStreak;
 
+  // v1.6.0
+  final ExpenseRepositoryImpl expenseRepository;
+  final ClipboardLocalDataSource clipboardLocalDataSource;
+  final TimeBlockLocalDataSource timeBlockLocalDataSource;
+
   const MyApp({
     super.key,
     required this.getStopwatchState,
@@ -228,6 +267,9 @@ class MyApp extends StatelessWidget {
     required this.deleteHabit,
     required this.markHabitComplete,
     required this.resetHabitStreak,
+    required this.expenseRepository,
+    required this.clipboardLocalDataSource,
+    required this.timeBlockLocalDataSource,
   });
 
   @override
@@ -280,13 +322,36 @@ class MyApp extends StatelessWidget {
             resetHabitStreak: resetHabitStreak,
           ),
         ),
+        // ── v1.6.0 module blocs ───────────────────────────────────────
+        BlocProvider<ExpenseBloc>(
+          create: (context) => ExpenseBloc(repository: expenseRepository),
+        ),
+        BlocProvider<ClipboardBloc>(
+          create: (context) => ClipboardBloc(
+            dataSource: clipboardLocalDataSource,
+          ),
+        ),
+        BlocProvider<TimeBlockBloc>(
+          create: (context) => TimeBlockBloc(
+            dataSource: timeBlockLocalDataSource,
+          ),
+        ),
+        BlocProvider<AppBlockerBloc>(
+          create: (context) => AppBlockerBloc(),
+        ),
       ],
       child: MaterialApp(
         title: 'Aizen',
         debugShowCheckedModeBanner: false,
         theme: AizenTheme.darkTheme,
-        scrollBehavior: AizenScrollBehavior(),
+        scrollBehavior: const AizenScrollBehavior(),
         home: const DashboardPage(),
+        builder: (context, child) {
+          // Re-apply AMOLED system UI overlay whenever the app rebuilds
+          // (e.g. when a route pushes a different AppBar theme).
+          AizenTheme.applyAmoledSystemUIOverlay();
+          return child!;
+        },
       ),
     );
   }

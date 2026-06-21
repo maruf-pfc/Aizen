@@ -1,6 +1,16 @@
 # Aizen Ecosystem ⚡
 
-Aizen is a massive, premium, local-first productivity ecosystem. It features a clean, high-density, minimalist user interface inspired by compact layouts like Bitwarden and Telegram, customized with an AMOLED Dark theme and full Material 3 styling.
+> **Current Version: 1.6.0** — AMOLED M3 mobile-native overhaul with 4 new
+> advanced modules (Scientific Calculator, Expense & Bill Pay, Clipboard
+> Vault, 24-Hour Day Planner).
+
+Aizen is a massive, premium, local-first productivity ecosystem. It features
+a clean, high-density, minimalist user interface inspired by compact layouts
+like Bitwarden and Telegram, customised with a strict AMOLED Black canvas
+(`0xFF000000`), high-density Material 3 surfaces, native Android scroll
+physics (`BouncingScrollPhysics`), M3 `ZoomPageTransitionsBuilder` page
+transitions, drag-handle modal bottom sheets, and tactile `HapticFeedback`
+on every interactive surface.
 
 ---
 

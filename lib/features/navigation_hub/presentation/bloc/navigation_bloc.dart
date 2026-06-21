@@ -34,8 +34,18 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
           const NavigationItem(id: 'stopwatch', title: 'Stopwatch', icon: Icons.timer, category: 'active_features'),
           const NavigationItem(id: 'quick_tasks', title: 'Quick Tasks', icon: Icons.playlist_add_check, category: 'active_features'),
           const NavigationItem(id: 'device_specs', title: 'Device Specs', icon: Icons.info_outline, category: 'active_features'),
-          const NavigationItem(id: 'app_blocker', title: 'Focus Guardian', icon: Icons.block, category: 'active_features', badge: 'New'),
-          const NavigationItem(id: 'habit_tracker', title: 'Habit Builder', icon: Icons.track_changes, category: 'active_features', badge: 'New'),
+          const NavigationItem(id: 'app_blocker', title: 'Focus Guardian', icon: Icons.block, category: 'active_features'),
+          const NavigationItem(id: 'habit_tracker', title: 'Habit Builder', icon: Icons.track_changes, category: 'active_features'),
+        ],
+      ),
+      ModuleCategory(
+        id: 'v1_6_modules',
+        name: 'v1.6.0 Modules',
+        items: [
+          const NavigationItem(id: 'calculator', title: 'Scientific Calculator', icon: Icons.calculate, category: 'v1_6_modules', badge: 'New'),
+          const NavigationItem(id: 'expense_tracker', title: 'Expense & Bills', icon: Icons.account_balance_wallet, category: 'v1_6_modules', badge: 'New'),
+          const NavigationItem(id: 'clipboard_vault', title: 'Clipboard Vault', icon: Icons.content_paste, category: 'v1_6_modules', badge: 'New'),
+          const NavigationItem(id: 'time_blocker', title: 'Day Planner', icon: Icons.view_agenda, category: 'v1_6_modules', badge: 'New'),
         ],
       ),
     ];

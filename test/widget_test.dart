@@ -27,9 +27,13 @@ import 'package:Aizen/features/habit_tracker/domain/usecases/save_habit.dart';
 import 'package:Aizen/features/habit_tracker/domain/usecases/delete_habit.dart';
 import 'package:Aizen/features/habit_tracker/domain/usecases/mark_habit_complete.dart';
 import 'package:Aizen/features/habit_tracker/domain/usecases/reset_habit_streak.dart';
+import 'package:Aizen/features/expense_tracker/data/repositories/expense_repository_impl.dart';
+import 'package:Aizen/features/clipboard/data/datasources/clipboard_local_data_source.dart';
+import 'package:Aizen/features/time_blocker/data/datasources/time_block_local_data_source.dart';
 import 'package:Aizen/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MockGetHabits extends Mock implements GetHabits {}
 class MockSaveHabit extends Mock implements SaveHabit {}
@@ -165,6 +169,8 @@ void main() {
   });
 
   testWidgets('App renders stopwatch and displays title', (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
     await tester.pumpWidget(
       MyApp(
         getStopwatchState: mockGetStopwatchState,
@@ -190,6 +196,11 @@ void main() {
         deleteHabit: mockDeleteHabit,
         markHabitComplete: mockMarkHabitComplete,
         resetHabitStreak: mockResetHabitStreak,
+        expenseRepository: ExpenseRepositoryImpl(
+          ExpenseLocalDataSource(prefs),
+        ),
+        clipboardLocalDataSource: ClipboardLocalDataSource(prefs),
+        timeBlockLocalDataSource: TimeBlockLocalDataSource(prefs),
       ),
     );
 

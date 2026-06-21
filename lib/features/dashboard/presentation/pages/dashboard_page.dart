@@ -3,11 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../device_info/presentation/pages/device_info_page.dart';
 import '../../../stopwatch/presentation/pages/stopwatch_page.dart';
 import '../../../todo/presentation/pages/todo_page.dart';
+import '../../../calculator/presentation/pages/calculator_page.dart';
 import '../../../navigation_hub/presentation/widgets/navigation_hub_drawer.dart';
 import '../../../navigation_hub/presentation/bloc/navigation_bloc.dart';
 import '../../../navigation_hub/presentation/bloc/navigation_event.dart';
 import '../../../navigation_hub/presentation/bloc/navigation_state.dart';
+import 'package:Aizen/core/theme/aizen_theme.dart';
 
+/// Aizen v1.4.2 — Dashboard with M3 NavigationBar.
+///
+/// The bottom navigation bar exposes the 4 most-used modules (Stopwatch,
+/// Tasks, Calculator, Specs) with native M3 indicators and pill highlights.
+/// The full module inventory lives in the drawer (hamburger menu).
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
@@ -16,52 +23,56 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  static const _pages = <Widget>[
+    StopwatchPage(),
+    TodoPage(),
+    CalculatorPage(),
+    DeviceInfoPage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
+        final index = state.activeIndex.clamp(0, _pages.length - 1);
         return Scaffold(
-          backgroundColor: const Color(0xFF000000),
+          backgroundColor: AizenTheme.amoledBlack,
           drawer: const NavigationHubDrawer(),
-          body: state.activeIndex == 0
-              ? const StopwatchPage()
-              : state.activeIndex == 1
-                  ? const TodoPage()
-                  : const DeviceInfoPage(),
+          body: IndexedStack(index: index, children: _pages),
           bottomNavigationBar: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               border: Border(
-                top: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.08),
-                  width: 1,
-                ),
+                top: BorderSide(color: AizenTheme.hairlineBorder, width: 1),
               ),
             ),
-            child: BottomNavigationBar(
-              backgroundColor: const Color(0xFF000000),
-              selectedItemColor: const Color(0xFF7C4DFF),
-              unselectedItemColor: Colors.white.withValues(alpha: 0.4),
-              currentIndex: state.activeIndex,
-              selectedFontSize: 11,
-              unselectedFontSize: 11,
-              type: BottomNavigationBarType.fixed,
-              onTap: (index) {
-                context.read<NavigationBloc>().add(ChangeActiveIndexEvent(index));
+            child: NavigationBar(
+              backgroundColor: AizenTheme.amoledBlack,
+              surfaceTintColor: Colors.transparent,
+              selectedIndex: index,
+              onDestinationSelected: (i) {
+                context
+                    .read<NavigationBloc>()
+                    .add(ChangeActiveIndexEvent(i));
               },
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.timer_outlined, size: 20),
-                  activeIcon: Icon(Icons.timer, size: 20),
+              destinations: const [
+                NavigationDestination(
+                  icon: Icon(Icons.timer_outlined),
+                  selectedIcon: Icon(Icons.timer),
                   label: 'Stopwatch',
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.playlist_add_check, size: 20),
-                  activeIcon: Icon(Icons.task_alt, size: 20),
+                NavigationDestination(
+                  icon: Icon(Icons.playlist_add_check_outlined),
+                  selectedIcon: Icon(Icons.task_alt),
                   label: 'Tasks',
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.info_outline, size: 20),
-                  activeIcon: Icon(Icons.info, size: 20),
+                NavigationDestination(
+                  icon: Icon(Icons.calculate_outlined),
+                  selectedIcon: Icon(Icons.calculate),
+                  label: 'Calc',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.info_outline),
+                  selectedIcon: Icon(Icons.info),
                   label: 'Specs',
                 ),
               ],

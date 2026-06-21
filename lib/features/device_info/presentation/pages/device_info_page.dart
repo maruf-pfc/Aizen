@@ -20,15 +20,18 @@ class DeviceInfoPage extends StatefulWidget {
 }
 
 class _DeviceInfoPageState extends State<DeviceInfoPage> {
+  late DeviceInfoBloc _deviceInfoBloc;
+
   @override
   void initState() {
     super.initState();
-    context.read<DeviceInfoBloc>().add(LoadDeviceInfoEvent());
+    _deviceInfoBloc = context.read<DeviceInfoBloc>();
+    _deviceInfoBloc.add(LoadDeviceInfoEvent());
   }
 
   @override
   void dispose() {
-    context.read<DeviceInfoBloc>().add(PauseBatteryTrackingEvent());
+    _deviceInfoBloc.add(PauseBatteryTrackingEvent());
     super.dispose();
   }
 

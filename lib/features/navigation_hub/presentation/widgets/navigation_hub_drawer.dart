@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/services.dart';
 import '../bloc/navigation_bloc.dart';
 import '../bloc/navigation_event.dart';
 import '../bloc/navigation_state.dart';
@@ -8,6 +9,11 @@ import '../../domain/entities/module_category.dart';
 import '../../../settings/presentation/pages/settings_page.dart';
 import '../../../focus_guardian/presentation/pages/app_blocker_page.dart';
 import '../../../habit_tracker/presentation/pages/habit_tracker_page.dart';
+import '../../../calculator/presentation/pages/calculator_page.dart';
+import '../../../expense_tracker/presentation/pages/expense_tracker_page.dart';
+import '../../../clipboard/presentation/pages/clipboard_vault_page.dart';
+import '../../../time_blocker/presentation/pages/time_blocker_page.dart';
+import '../../../../core/theme/aizen_theme.dart';
 
 abstract class VisualNode {}
 
@@ -46,11 +52,8 @@ class _NavigationHubDrawerState extends State<NavigationHubDrawer> {
   List<VisualNode> _flattenCategories(List<ModuleCategory> categories) {
     final List<VisualNode> nodes = [];
     for (final category in categories) {
-      nodes.add(HeaderNode(category));
-      if (!category.isCollapsed) {
-        for (final item in category.items) {
-          nodes.add(ItemNode(item));
-        }
+      for (final item in category.items) {
+        nodes.add(ItemNode(item));
       }
     }
     return nodes;
@@ -59,43 +62,99 @@ class _NavigationHubDrawerState extends State<NavigationHubDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: const Color(0xFF000000),
+      backgroundColor: AizenTheme.amoledBlack,
       child: SafeArea(
         child: Column(
           children: [
+            // Drawer header — Aizen wordmark
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: AizenTheme.hairlineBorder),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: AizenTheme.primaryPurple,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.bolt,
+                      color: Colors.black,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Aizen',
+                          style: TextStyle(
+                            color: AizenTheme.textPrimary,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.4,
+                          ),
+                        ),
+                        Text(
+                          'v1.4.2  •  AMOLED M3',
+                          style: TextStyle(
+                            color: AizenTheme.textTertiary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
             // Search Input Header
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0C0C0C),
-                  borderRadius: BorderRadius.circular(8),
+                  color: AizenTheme.surfaceLow,
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.08),
+                    color: AizenTheme.hairlineBorder,
                   ),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.search,
                       size: 18,
-                      color: Colors.white.withValues(alpha: 0.4),
+                      color: AizenTheme.textTertiary,
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: TextField(
                         controller: _searchController,
-                        style: const TextStyle(color: Colors.white, fontSize: 14),
+                        style: const TextStyle(
+                            color: AizenTheme.textPrimary, fontSize: 14),
                         decoration: const InputDecoration(
-                          hintText: 'Search active modules...',
-                          hintStyle: TextStyle(color: Color(0x66FFFFFF), fontSize: 14),
+                          hintText: 'Search modules...',
+                          hintStyle: TextStyle(
+                              color: AizenTheme.textTertiary, fontSize: 13),
                           border: InputBorder.none,
                           isDense: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                          contentPadding: EdgeInsets.symmetric(vertical: 12.0),
                         ),
                         onChanged: (val) {
-                          context.read<NavigationBloc>().add(SearchQueryChangedEvent(val));
+                          context
+                              .read<NavigationBloc>()
+                              .add(SearchQueryChangedEvent(val));
                         },
                       ),
                     ),
@@ -184,6 +243,7 @@ class _NavigationHubDrawerState extends State<NavigationHubDrawer> {
         final item = node.item;
         return InkWell(
           onTap: () {
+            HapticFeedback.selectionClick();
             Navigator.pop(context); // Close Drawer
             Navigator.popUntil(context, (route) => route.isFirst); // Go back to root (DashboardPage)
             if (item.id == 'stopwatch') {
@@ -192,6 +252,26 @@ class _NavigationHubDrawerState extends State<NavigationHubDrawer> {
               context.read<NavigationBloc>().add(const ChangeActiveIndexEvent(1));
             } else if (item.id == 'device_specs') {
               context.read<NavigationBloc>().add(const ChangeActiveIndexEvent(2));
+            } else if (item.id == 'calculator') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const CalculatorPage()),
+              );
+            } else if (item.id == 'expense_tracker') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ExpenseTrackerPage()),
+              );
+            } else if (item.id == 'clipboard_vault') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ClipboardVaultPage()),
+              );
+            } else if (item.id == 'time_blocker') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TimeBlockerPage()),
+              );
             } else if (item.id == 'app_blocker') {
               Navigator.push(
                 context,
@@ -215,15 +295,16 @@ class _NavigationHubDrawerState extends State<NavigationHubDrawer> {
                 Icon(
                   item.icon,
                   size: 20,
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: AizenTheme.textSecondary,
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     item.title,
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.8),
-                      fontSize: 15,
+                    style: const TextStyle(
+                      color: AizenTheme.textPrimary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
@@ -231,18 +312,19 @@ class _NavigationHubDrawerState extends State<NavigationHubDrawer> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF7C4DFF).withValues(alpha: 0.2),
+                      color: AizenTheme.primaryPurple.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(4),
                       border: Border.all(
-                        color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
+                        color: AizenTheme.primaryPurple.withValues(alpha: 0.4),
                       ),
                     ),
                     child: Text(
                       item.badge!,
                       style: const TextStyle(
-                        color: Color(0xFF7C4DFF),
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
+                        color: AizenTheme.primaryPurple,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.4,
                       ),
                     ),
                   ),
