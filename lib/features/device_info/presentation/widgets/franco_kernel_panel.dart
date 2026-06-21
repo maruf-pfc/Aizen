@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../domain/entities/battery_info.dart';
 
 class FrancoKernelPanel extends StatelessWidget {
-  const FrancoKernelPanel({super.key});
+  final BatteryInfo? info;
+
+  const FrancoKernelPanel({super.key, this.info});
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +58,25 @@ class FrancoKernelPanel extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildHeroStat('35%', 'Battery Level', const Color(0xFFFFB300)),
+                _buildHeroStat(
+                  info != null ? '${info!.percentage}%' : '35%',
+                  'Battery Level',
+                  const Color(0xFFFFB300),
+                ),
                 _buildHeroDivider(),
-                _buildHeroStat('39°C', 'Temperature', const Color(0xFFFF5252)),
+                _buildHeroStat(
+                  info?.temperature != null ? '${info!.temperature!.toStringAsFixed(1)}°C' : '39°C',
+                  'Temperature',
+                  const Color(0xFFFF5252),
+                ),
                 _buildHeroDivider(),
-                _buildHeroStat('693 mA', 'Discharging', const Color(0xFF00E676)),
+                _buildHeroStat(
+                  '693 mA',
+                  info != null
+                      ? (info!.status == ChargingStatus.charging ? 'Charging' : 'Discharging')
+                      : 'Discharging',
+                  const Color(0xFF00E676),
+                ),
               ],
             ),
           ),

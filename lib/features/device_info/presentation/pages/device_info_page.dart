@@ -143,6 +143,13 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                 },
               );
 
+              final kernelPanel = BlocSelector<DeviceInfoBloc, DeviceInfoState, BatteryInfo?>(
+                selector: (state) => state.batteryInfo,
+                builder: (context, bt) {
+                  return FrancoKernelPanel(info: bt);
+                },
+              );
+
               if (isWide) {
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -161,7 +168,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              const FrancoKernelPanel(),
+                              kernelPanel,
                               const SizedBox(height: 16),
                               batteryPanel,
                               storagePanel,
@@ -179,7 +186,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                     children: [
                       hardwarePanel,
                       const SizedBox(height: 16),
-                      const FrancoKernelPanel(),
+                      kernelPanel,
                       const SizedBox(height: 16),
                       batteryPanel,
                       storagePanel,
