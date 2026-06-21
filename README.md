@@ -75,3 +75,9 @@ docker run -d -p 8080:80 blackstart-labs/aizen:latest
 - **High-Performance**: Ticker-driven leaf widgets update numbers independently from the parent BLoC.
 - **Lap Table**: Shows split durations and cumulative times; highlights the fastest lap in mint green and the slowest lap in coral red.
 - **Detailed Docs**: Refer to [Stopwatch Module Specifications](docs/features/stopwatch.md).
+
+### 2. Device Info System Module (v1.2.0)
+- **Deep Hardware Specs**: Queries and exposes CPU core count (`Platform.numberOfProcessors`), system memory, model, manufacturer, and kernel architecture.
+- **Reactive Battery Stream**: Listens to battery status updates in real-time, displaying charge percentages, charging status, temperature, and health indicators.
+- **Segmented Storage Graph**: Custom multi-segment UI progress indicator showing Used (violet) and Free (green) storage breakdowns in GBs.
+- **Detailed Docs**: Refer to [Device Info Module Specifications](docs/features/device_info.md).
