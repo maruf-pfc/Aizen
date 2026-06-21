@@ -14,6 +14,7 @@ Welcome to the documentation vault for **Aizen**, a massive, local-first product
 ## Active Modules
 - **[Stopwatch Module](features/stopwatch.md) (v1.0.0)**: Our reference module showcasing high-precision centisecond ticking, background persistence, and custom tabular figure alignment.
 - **[Device Info Module](features/device_info.md) (v1.2.0)**: System dashboard displaying deep hardware specs, real-time battery status streams, and custom segmented storage breakdowns.
+- **[Quick Tasks (Todo) Module](features/todo.md) (v1.3.0)**: High-density minimalist task manager with local NLP parsing, slide gestures, and subtask hierarchy.
 
 ---
 

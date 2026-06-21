@@ -23,14 +23,26 @@ import 'features/device_info/domain/usecases/get_storage_info.dart';
 import 'features/device_info/domain/usecases/stream_battery_info.dart';
 import 'features/device_info/presentation/bloc/device_info_bloc.dart';
 
+// Todo feature imports
+import 'features/todo/data/datasources/todo_local_data_source.dart';
+import 'features/todo/data/services/nlp_parser_service.dart';
+import 'features/todo/data/repositories/todo_repository_impl.dart';
+import 'features/todo/domain/usecases/get_tasks.dart';
+import 'features/todo/domain/usecases/save_task.dart';
+import 'features/todo/domain/usecases/delete_task.dart';
+import 'features/todo/domain/usecases/parse_nlp_input.dart';
+import 'features/todo/presentation/bloc/todo_bloc.dart';
+
 // Dashboard import
 import 'features/dashboard/presentation/pages/dashboard_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Dependencies
+  // Shared dependencies
   final sharedPreferences = await SharedPreferences.getInstance();
+
+  // Device Info Plugins
   final deviceInfoPlugin = DeviceInfoPlugin();
   final battery = Battery();
 
@@ -59,6 +71,19 @@ void main() async {
   final getStorageInfo = GetStorageInfo(deviceInfoRepository);
   final streamBatteryInfo = StreamBatteryInfo(deviceInfoRepository);
 
+  // Todo feature wiring
+  final todoLocalDataSource = TodoLocalDataSourceImpl(
+    sharedPreferences: sharedPreferences,
+  );
+  final todoRepository = TodoRepositoryImpl(
+    localDataSource: todoLocalDataSource,
+    nlpParserService: const NlpParserService(),
+  );
+  final getTasks = GetTasks(todoRepository);
+  final saveTask = SaveTask(todoRepository);
+  final deleteTask = DeleteTask(todoRepository);
+  final parseNlpInput = ParseNlpInput(todoRepository);
+
   runApp(
     MyApp(
       getStopwatchState: getStopwatchState,
@@ -69,6 +94,10 @@ void main() async {
       getHardwareInfo: getHardwareInfo,
       getStorageInfo: getStorageInfo,
       streamBatteryInfo: streamBatteryInfo,
+      getTasks: getTasks,
+      saveTask: saveTask,
+      deleteTask: deleteTask,
+      parseNlpInput: parseNlpInput,
     ),
   );
 }
@@ -84,6 +113,11 @@ class MyApp extends StatelessWidget {
   final GetStorageInfo getStorageInfo;
   final StreamBatteryInfo streamBatteryInfo;
 
+  final GetTasks getTasks;
+  final SaveTask saveTask;
+  final DeleteTask deleteTask;
+  final ParseNlpInput parseNlpInput;
+
   const MyApp({
     super.key,
     required this.getStopwatchState,
@@ -94,6 +128,10 @@ class MyApp extends StatelessWidget {
     required this.getHardwareInfo,
     required this.getStorageInfo,
     required this.streamBatteryInfo,
+    required this.getTasks,
+    required this.saveTask,
+    required this.deleteTask,
+    required this.parseNlpInput,
   });
 
   @override
@@ -127,6 +165,14 @@ class MyApp extends StatelessWidget {
               getHardwareInfo: getHardwareInfo,
               getStorageInfo: getStorageInfo,
               streamBatteryInfo: streamBatteryInfo,
+            ),
+          ),
+          BlocProvider<TodoBloc>(
+            create: (context) => TodoBloc(
+              getTasks: getTasks,
+              saveTask: saveTask,
+              deleteTask: deleteTask,
+              parseNlpInput: parseNlpInput,
             ),
           ),
         ],
