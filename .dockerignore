@@ -1,0 +1,28 @@
+# VCS
+.git/
+.github/
+
+# IDE and caches
+.idea/
+.vscode/
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Local build artifacts
+build/
+
+# Native platforms (not needed for web build)
+android/
+ios/
+windows/
+macos/
+linux/
+
+# Tests
+test/
+
+# Docker configurations
+Dockerfile
+.dockerignore
