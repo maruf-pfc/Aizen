@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../device_info/presentation/pages/device_info_page.dart';
 import '../../../stopwatch/presentation/pages/stopwatch_page.dart';
 import '../../../todo/presentation/pages/todo_page.dart';
+import '../../../navigation_hub/presentation/widgets/navigation_hub_drawer.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -17,6 +18,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF000000),
+      drawer: const NavigationHubDrawer(),
       body: _currentIndex == 0
           ? const StopwatchPage()
           : _currentIndex == 1

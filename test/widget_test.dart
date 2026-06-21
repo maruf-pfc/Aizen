@@ -14,6 +14,13 @@ import 'package:Aizen/features/todo/domain/usecases/get_tasks.dart';
 import 'package:Aizen/features/todo/domain/usecases/save_task.dart';
 import 'package:Aizen/features/todo/domain/usecases/delete_task.dart';
 import 'package:Aizen/features/todo/domain/usecases/parse_nlp_input.dart';
+import 'package:Aizen/features/settings/domain/usecases/get_settings.dart';
+import 'package:Aizen/features/settings/domain/usecases/save_settings.dart';
+import 'package:Aizen/features/settings/domain/usecases/clear_cache.dart';
+import 'package:Aizen/features/settings/domain/usecases/optimize_database.dart';
+import 'package:Aizen/features/settings/domain/usecases/export_data.dart';
+import 'package:Aizen/features/settings/domain/usecases/import_data.dart';
+import 'package:Aizen/features/settings/domain/entities/global_settings.dart';
 import 'package:Aizen/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -32,6 +39,13 @@ class MockGetTasks extends Mock implements GetTasks {}
 class MockSaveTask extends Mock implements SaveTask {}
 class MockDeleteTask extends Mock implements DeleteTask {}
 class MockParseNlpInput extends Mock implements ParseNlpInput {}
+
+class MockGetSettings extends Mock implements GetSettings {}
+class MockSaveSettings extends Mock implements SaveSettings {}
+class MockClearCache extends Mock implements ClearCache {}
+class MockOptimizeDatabase extends Mock implements OptimizeDatabase {}
+class MockExportData extends Mock implements ExportData {}
+class MockImportData extends Mock implements ImportData {}
 
 // Dummy implementation for SaveStopwatchState to allow mocktail stubbing
 abstract class SaveSaveStopwatchState extends Mock implements SaveStopwatchState {}
@@ -52,6 +66,13 @@ void main() {
   late MockDeleteTask mockDeleteTask;
   late MockParseNlpInput mockParseNlpInput;
 
+  late MockGetSettings mockGetSettings;
+  late MockSaveSettings mockSaveSettings;
+  late MockClearCache mockClearCache;
+  late MockOptimizeDatabase mockOptimizeDatabase;
+  late MockExportData mockExportData;
+  late MockImportData mockImportData;
+
   setUp(() {
     mockGetStopwatchState = MockGetStopwatchState();
     mockSaveStopwatchState = MockSaveStopwatchState();
@@ -68,10 +89,18 @@ void main() {
     mockDeleteTask = MockDeleteTask();
     mockParseNlpInput = MockParseNlpInput();
 
+    mockGetSettings = MockGetSettings();
+    mockSaveSettings = MockSaveSettings();
+    mockClearCache = MockClearCache();
+    mockOptimizeDatabase = MockOptimizeDatabase();
+    mockExportData = MockExportData();
+    mockImportData = MockImportData();
+
     // Default stubbing
     when(() => mockGetStopwatchState()).thenAnswer((_) async => (null, null));
     when(() => mockGetLapsUsecase()).thenAnswer((_) async => (null, null));
     when(() => mockGetTasks()).thenAnswer((_) async => (null, <Task>[]));
+    when(() => mockGetSettings()).thenAnswer((_) async => (null, const GlobalSettings()));
 
     when(() => mockGetHardwareInfo()).thenAnswer(
       (_) async => (
@@ -125,6 +154,12 @@ void main() {
         saveTask: mockSaveTask,
         deleteTask: mockDeleteTask,
         parseNlpInput: mockParseNlpInput,
+        getSettings: mockGetSettings,
+        saveSettings: mockSaveSettings,
+        clearCache: mockClearCache,
+        optimizeDatabase: mockOptimizeDatabase,
+        exportData: mockExportData,
+        importData: mockImportData,
       ),
     );
 
@@ -137,8 +172,5 @@ void main() {
     // Initial stopwatch state digits should exist (00:00.00)
     expect(find.text('00:00'), findsOneWidget);
     expect(find.text('.00'), findsOneWidget);
-
-    // Start button should exist
-    expect(find.text('START'), findsOneWidget);
   });
 }

@@ -28,6 +28,16 @@ class _TodoPageState extends State<TodoPage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF000000),
         elevation: 0,
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu, color: Colors.white, size: 20),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
         title: const Text(
           'Quick Tasks',
           style: TextStyle(

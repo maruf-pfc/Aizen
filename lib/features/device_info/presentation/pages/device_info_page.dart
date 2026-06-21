@@ -38,6 +38,16 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
         backgroundColor: const Color(0xFF000000),
         elevation: 0,
         centerTitle: false,
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu, color: Colors.white, size: 20),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
         title: const Text(
           'Aizen Specifications',
           style: TextStyle(

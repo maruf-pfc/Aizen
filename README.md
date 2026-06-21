@@ -88,3 +88,10 @@ docker run -d -p 8080:80 blackstart-labs/aizen:latest
 - **Gestural Interactivity**: Slide right to complete or slide left to delete, coupled with reactive sorting.
 - **Detailed Docs**: Refer to [Quick Tasks Module Specifications](docs/features/todo.md).
 
+### 4. Unified Navigation Workspace & Settings Hub (v1.4.0)
+- **Command Palette Sidebar**: Search-enabled drawer to filter and launch 50+ active modules in real-time.
+- **Collapsible Category Accordions**: Flat visual node tree representation using a single optimized `ListView.builder` for O(1) layout rendering and lazy resource usage.
+- **Diagnostics Panel**: Diagnostics checks for system-level overlay and usage statistics permissions, complete with simulated native intent triggers.
+- **Database Compaction**: Performance controls to purge cache directories, optimize db models, and export/import configuration payloads.
+- **Detailed Docs**: Refer to [Unified Navigation Workspace Specs](docs/features/navigation_hub.md) and [Advanced Settings Specs](docs/features/settings.md).
+

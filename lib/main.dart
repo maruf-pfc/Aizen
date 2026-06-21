@@ -33,12 +33,26 @@ import 'features/todo/domain/usecases/delete_task.dart';
 import 'features/todo/domain/usecases/parse_nlp_input.dart';
 import 'features/todo/presentation/bloc/todo_bloc.dart';
 
+// Navigation Hub feature imports
+import 'features/navigation_hub/presentation/bloc/navigation_bloc.dart';
+
+// Settings feature imports
+import 'features/settings/data/datasources/settings_local_data_source.dart';
+import 'features/settings/data/repositories/settings_repository_impl.dart';
+import 'features/settings/domain/usecases/get_settings.dart';
+import 'features/settings/domain/usecases/save_settings.dart';
+import 'features/settings/domain/usecases/clear_cache.dart';
+import 'features/settings/domain/usecases/optimize_database.dart';
+import 'features/settings/domain/usecases/export_data.dart';
+import 'features/settings/domain/usecases/import_data.dart';
+import 'features/settings/presentation/bloc/settings_bloc.dart';
+
 // Dashboard import
 import 'features/dashboard/presentation/pages/dashboard_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Shared dependencies
   final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -84,6 +98,20 @@ void main() async {
   final deleteTask = DeleteTask(todoRepository);
   final parseNlpInput = ParseNlpInput(todoRepository);
 
+  // Settings feature wiring
+  final settingsLocalDataSource = SettingsLocalDataSourceImpl(
+    sharedPreferences: sharedPreferences,
+  );
+  final settingsRepository = SettingsRepositoryImpl(
+    localDataSource: settingsLocalDataSource,
+  );
+  final getSettings = GetSettings(settingsRepository);
+  final saveSettings = SaveSettings(settingsRepository);
+  final clearCache = ClearCache(settingsRepository);
+  final optimizeDatabase = OptimizeDatabase(settingsRepository);
+  final exportData = ExportData(settingsRepository);
+  final importData = ImportData(settingsRepository);
+
   runApp(
     MyApp(
       getStopwatchState: getStopwatchState,
@@ -98,6 +126,12 @@ void main() async {
       saveTask: saveTask,
       deleteTask: deleteTask,
       parseNlpInput: parseNlpInput,
+      getSettings: getSettings,
+      saveSettings: saveSettings,
+      clearCache: clearCache,
+      optimizeDatabase: optimizeDatabase,
+      exportData: exportData,
+      importData: importData,
     ),
   );
 }
@@ -118,6 +152,13 @@ class MyApp extends StatelessWidget {
   final DeleteTask deleteTask;
   final ParseNlpInput parseNlpInput;
 
+  final GetSettings getSettings;
+  final SaveSettings saveSettings;
+  final ClearCache clearCache;
+  final OptimizeDatabase optimizeDatabase;
+  final ExportData exportData;
+  final ImportData importData;
+
   const MyApp({
     super.key,
     required this.getStopwatchState,
@@ -132,6 +173,12 @@ class MyApp extends StatelessWidget {
     required this.saveTask,
     required this.deleteTask,
     required this.parseNlpInput,
+    required this.getSettings,
+    required this.saveSettings,
+    required this.clearCache,
+    required this.optimizeDatabase,
+    required this.exportData,
+    required this.importData,
   });
 
   @override
@@ -173,6 +220,19 @@ class MyApp extends StatelessWidget {
               saveTask: saveTask,
               deleteTask: deleteTask,
               parseNlpInput: parseNlpInput,
+            ),
+          ),
+          BlocProvider<NavigationBloc>(
+            create: (context) => NavigationBloc(),
+          ),
+          BlocProvider<SettingsBloc>(
+            create: (context) => SettingsBloc(
+              getSettings: getSettings,
+              saveSettings: saveSettings,
+              clearCache: clearCache,
+              optimizeDatabase: optimizeDatabase,
+              exportData: exportData,
+              importData: importData,
             ),
           ),
         ],
