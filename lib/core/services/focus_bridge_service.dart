@@ -40,8 +40,8 @@ class FocusBridgeService with WidgetsBindingObserver {
           'packageName': map['packageName']?.toString() ?? '',
         };
       }).toList();
-    } on PlatformException catch (e) {
-      debugPrint('Failed to get installed apps: ${e.message}');
+    } catch (e) {
+      debugPrint('Error: $e');
       return [];
     }
   }
@@ -50,8 +50,8 @@ class FocusBridgeService with WidgetsBindingObserver {
     try {
       final bool? result = await _channel.invokeMethod<bool>('checkUsagePermission');
       return result ?? false;
-    } on PlatformException catch (e) {
-      debugPrint('Failed to check usage permission: ${e.message}');
+    } catch (e) {
+      debugPrint('Error: $e');
       return false;
     }
   }
@@ -60,8 +60,8 @@ class FocusBridgeService with WidgetsBindingObserver {
     try {
       final bool? result = await _channel.invokeMethod<bool>('checkOverlayPermission');
       return result ?? false;
-    } on PlatformException catch (e) {
-      debugPrint('Failed to check overlay permission: ${e.message}');
+    } catch (e) {
+      debugPrint('Error: $e');
       return false;
     }
   }
@@ -73,8 +73,8 @@ class FocusBridgeService with WidgetsBindingObserver {
         {'packages': packageNames},
       );
       return result ?? false;
-    } on PlatformException catch (e) {
-      debugPrint('Failed to update blacklist data: ${e.message}');
+    } catch (e) {
+      debugPrint('Error: $e');
       return false;
     }
   }

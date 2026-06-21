@@ -94,7 +94,10 @@ class _HabitCardState extends State<HabitCard> {
     final now = DateTime.now();
     final todayStr = '${now.year}-${now.month}-${now.day}';
     final completedToday = habit.completionHistory.any(
-      (d) => '${d.year}-${d.month}-${d.day}' == todayStr,
+      (d) {
+        final local = d.toLocal();
+        return local.year == now.year && local.month == now.month && local.day == now.day;
+      },
     );
 
     final activeDays = habit.activeStreakDays;

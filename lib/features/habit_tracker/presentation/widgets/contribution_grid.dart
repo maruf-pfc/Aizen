@@ -13,14 +13,21 @@ class ContributionGrid extends StatelessWidget {
     final startDate = today.subtract(const Duration(days: 364));
 
     final completedSet = habit.completionHistory.map(
-      (d) => '${d.year}-${d.month}-${d.day}',
+      (d) {
+        final local = d.toLocal();
+        return '${local.year}-${local.month}-${local.day}';
+      },
     ).toSet();
 
     final relapseSet = habit.relapseLogs.map(
-      (l) => '${l.timestamp.year}-${l.timestamp.month}-${l.timestamp.day}',
+      (l) {
+        final local = l.timestamp.toLocal();
+        return '${local.year}-${local.month}-${local.day}';
+      },
     ).toSet();
 
-    final creationDate = DateTime(habit.createdAt.year, habit.createdAt.month, habit.createdAt.day);
+    final localCreated = habit.createdAt.toLocal();
+    final creationDate = DateTime(localCreated.year, localCreated.month, localCreated.day);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
