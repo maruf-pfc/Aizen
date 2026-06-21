@@ -27,7 +27,7 @@ class FrancoKernelPanel extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'FRANCO KERNEL MANAGER',
+                    'KERNEL PROFILE & TELEMETRY',
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.9),
                       fontSize: 12,
