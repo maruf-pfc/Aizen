@@ -8,6 +8,7 @@ class ClaimBlockSheet extends StatefulWidget {
   final int startHour;
   final int endHour;
   final List<TimeBlock> existingBlocks;
+  final String initialLabel;
   final void Function(String label, String color, int startHour, int endHour)
       onSubmit;
 
@@ -17,6 +18,7 @@ class ClaimBlockSheet extends StatefulWidget {
     required this.endHour,
     required this.existingBlocks,
     required this.onSubmit,
+    this.initialLabel = '',
   });
 
   @override
@@ -34,15 +36,20 @@ class _ClaimBlockSheetState extends State<ClaimBlockSheet> {
     super.initState();
     _startHour = widget.startHour;
     _endHour = widget.endHour;
+    _label = widget.initialLabel;
   }
 
   @override
   Widget build(BuildContext context) {
     final pad = MediaQuery.of(context).viewInsets.bottom;
-    return Padding(
+    return Container(
+      decoration: const BoxDecoration(
+        color: AizenTheme.surfaceLow,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AizenTheme.shapeLg)),
+      ),
       padding: EdgeInsets.only(bottom: pad),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -59,7 +66,8 @@ class _ClaimBlockSheetState extends State<ClaimBlockSheet> {
             // Time range sliders
             _rangePicker(),
             const SizedBox(height: 12),
-            TextField(
+            TextFormField(
+              initialValue: _label,
               autofocus: true,
               style: const TextStyle(
                   color: AizenTheme.textPrimary, fontSize: 14),

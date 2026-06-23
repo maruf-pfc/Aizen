@@ -1,4 +1,4 @@
-# Time Blocker / Day Planner Module (v1.6.0)
+# Time Blocker / Day Planner Module (v1.5.0)
 
 The Time Blocker (or Day Planner) is a high-density, interactive 24-hour visual grid planner. It allows users to partition their day into distinct hourly blocks, track active block progress in real-time, and mark blocks complete.
 

@@ -95,7 +95,7 @@ class ExpenseLedgerRow extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Text(
-              '$sign\u{09F3}${entry.amount.abs().toStringAsFixed(2)}',
+              '$sign${entry.currency}${entry.amount.abs().toStringAsFixed(2)}',
               style: TextStyle(
                 color: amountColor,
                 fontSize: 15,

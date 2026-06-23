@@ -61,20 +61,20 @@ import 'features/habit_tracker/presentation/bloc/habit_bloc.dart';
 // Dashboard import
 import 'features/dashboard/presentation/pages/dashboard_page.dart';
 
-// v1.6.0 — Expense Tracker feature imports
+// v1.5.0 — Expense Tracker feature imports
 import 'features/expense_tracker/data/repositories/expense_repository_impl.dart';
 import 'features/expense_tracker/presentation/bloc/expense_bloc.dart';
 import 'features/expense_tracker/services/bill_notification_service.dart';
 
-// v1.6.0 — Clipboard Vault feature imports
+// v1.5.0 — Clipboard Vault feature imports
 import 'features/clipboard/data/datasources/clipboard_local_data_source.dart';
 import 'features/clipboard/presentation/bloc/clipboard_bloc.dart';
 
-// v1.6.0 — Time Blocker feature imports
+// v1.5.0 — Time Blocker feature imports
 import 'features/time_blocker/data/datasources/time_block_local_data_source.dart';
 import 'features/time_blocker/presentation/bloc/time_block_bloc.dart';
 
-// v1.6.0 — Focus Guardian App Blocker bloc
+// v1.5.0 — Focus Guardian App Blocker bloc
 import 'features/focus_guardian/presentation/bloc/app_blocker_bloc.dart';
 
 void main() async {
@@ -163,17 +163,17 @@ void main() async {
   final markHabitComplete = MarkHabitComplete(habitRepository);
   final resetHabitStreak = ResetHabitStreak(habitRepository);
 
-  // v1.6.0 — Expense Tracker feature wiring
+  // v1.5.0 — Expense Tracker feature wiring
   final expenseRepository = ExpenseRepositoryImpl(
     ExpenseLocalDataSource(sharedPreferences),
   );
   // Initialise the bill-pay notification channel eagerly.
   await BillNotificationService.instance.init();
 
-  // v1.6.0 — Clipboard Vault feature wiring
+  // v1.5.0 — Clipboard Vault feature wiring
   final clipboardLocalDataSource = ClipboardLocalDataSource(sharedPreferences);
 
-  // v1.6.0 — Time Blocker feature wiring
+  // v1.5.0 — Time Blocker feature wiring
   final timeBlockLocalDataSource = TimeBlockLocalDataSource(sharedPreferences);
 
   runApp(
@@ -237,7 +237,7 @@ class MyApp extends StatelessWidget {
   final MarkHabitComplete markHabitComplete;
   final ResetHabitStreak resetHabitStreak;
 
-  // v1.6.0
+  // v1.5.0
   final ExpenseRepositoryImpl expenseRepository;
   final ClipboardLocalDataSource clipboardLocalDataSource;
   final TimeBlockLocalDataSource timeBlockLocalDataSource;
@@ -322,7 +322,7 @@ class MyApp extends StatelessWidget {
             resetHabitStreak: resetHabitStreak,
           ),
         ),
-        // ── v1.6.0 module blocs ───────────────────────────────────────
+        // ── v1.5.0 module blocs ───────────────────────────────────────
         BlocProvider<ExpenseBloc>(
           create: (context) => ExpenseBloc(repository: expenseRepository),
         ),

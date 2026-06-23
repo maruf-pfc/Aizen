@@ -1,8 +1,8 @@
 # Aizen Ecosystem ⚡
 
-> **Current Version: v1.4.2** — M3 Expressive UI overhaul, hardened scientific
-> calculator engine, CI lint cleanup, spring-physics navigation, and full
-> test coverage expansion.
+> **Current Version: v1.5.0** — High-aura ecosystem release: cross-module
+> intelligence, persistent background stopwatch service, escalating friction
+> lockout, and behavioral relapse triage flow.
 
 Aizen is a premium, local-first productivity ecosystem for Android. It features
 a Koinly-inspired Sleek Dark canvas (`0xFF061012`), Material 3 Expressive design
@@ -117,10 +117,11 @@ GitHub Actions (`.github/workflows/`) runs on every push to `main`:
 - Dual tracking: real-time streak counter + manual daily check-in
 - 8 gamified levels (Recruit → Iron Will) with dynamic progress bars
 - 365-day contribution grid + post-relapse micro-journaling
+- Integrated **4-7-8 Breathing Triage Visualizer** to calm down post-relapse
 - Android home-screen widget via MethodChannels
 - Docs: [docs/features/habit_builder.md](docs/features/habit_builder.md)
 
-### 6. Scientific Calculator (v1.4.2)
+### 6. Scientific Calculator (v1.5.0)
 - Recursive-descent parser: zero regex, single-pass, low-RAM
 - **DEG/RAD** mode wired end-to-end from UI → engine
 - **Functions**: sin/cos/tan (with `tan(90°)` domain guard), asin/acos/atan,
@@ -130,27 +131,30 @@ GitHub Actions (`.github/workflows/`) runs on every push to `main`:
 - Memory (M+, M−, MR, MC), history tape (last 20)
 - Full unit test suite: 90+ tests across DEG mode, RAD mode, domain errors
 
-### 7. Expense & Bill Pay (v1.6.0)
+### 7. Expense & Bill Pay (v1.5.0)
 - Command-driven entry: `50 #lunch`, `-20 #refund note`
 - Persistent bill reminders with daily notifications
 - Ledger + Analytics + Bills tabbed view, swipe-to-delete
 - Koinly-inspired category spending breakdown and metrics
 - Docs: [docs/features/expense_tracker.md](docs/features/expense_tracker.md)
 
-### 8. Clipboard Vault (v1.6.0)
+### 8. Clipboard Vault (v1.5.0)
 - Auto-classifies clipboard entries: Links / Snippets / Plain Text
 - Single-pass heuristic classifier — zero Flutter dependencies
 - Filter chips, swipe-to-delete, tap-to-copy
 - Docs: [docs/features/clipboard_vault.md](docs/features/clipboard_vault.md)
 
-### 9. Day Planner — Time Blocker (v1.6.0)
+### 9. Day Planner — Time Blocker (v1.5.0)
 - 24-hour visual grid with hour-block claims
 - Live elapsed progress indicator on active blocks
 - Color palette, label editing, mark-complete, date navigation
 - Docs: [docs/features/time_blocker.md](docs/features/time_blocker.md)
 
-### 10. Focus Guardian (v1.4.0)
+### 10. Focus Guardian (v1.5.0)
 - Native Android overlay projection + background app blocking
+- **Escalating Friction Lockout**: 5s continuous hold to bypass restricted apps
+- **60-Min Emergency Failsafe**: Auto-unlock after 60 mins of overlay lock
+- **System status telemetry integration**: Session auto-saved if battery < 15% or temp > 45C
 - Docs: [docs/features/focus_guardian.md](docs/features/focus_guardian.md)
 
 ---
@@ -169,22 +173,22 @@ Run all: `flutter test`
 
 ## 📝 Changelog
 
-### v1.4.2 (current)
+### v1.5.0 (current)
+- **Scientific Calculator, Expense & Bill Pay, Clipboard Vault, 24-Hour Day Planner** — Added 4 brand-new major utility/productivity modules in a unified architecture.
+- **Stopwatch background service** — Added native Android `StopwatchService` with interactive lock screen notification tray actions (Play, Pause, Lap).
+- **Focus Guardian security loop** — Implemented Escalating Friction Lockout (5-second hold to bypass), 60-minute auto-unlock failsafe, and battery/thermal status auto-save protection.
+- **Habit Tracker triage** — Added post-relapse modal behavior triage with visual 4-7-8 breathing countdown animation.
+- **Cross-module symbiosis** — Connected Todo priority tasks to Time Blocker suggestions, and Expense Input bar with a mini Scientific Calculator bottom-sheet.
+- **Bug Fixes** — Resolved decimal factorial integer overflows in `CalculatorEngine` and escaped dollar signs in Dart string interpolation fields.
+- **Android Integration** — Added Habit Builder with streak engine, level progression, relapse journaling, and Android home-screen widget via MethodChannels.
+
+### v1.4.2
 - **CI** — resolved all `flutter analyze` warnings (unused imports, library names, deprecated members, async context gaps, curly-braces lint)
 - **Theme** — upgraded to full M3 Expressive: Inter type scale, spring-physics page transitions, animated pill NavigationBar, shape token system, `AizenBreakpoints` responsive helpers, `AizenPressable` widget
 - **Calculator** — complete scientific calculator rewrite: `degMode` parameter in engine, `tan(90°)` domain guard, 15+ new functions (`log2`, `fact`, `sq`, `rec`, `asinh`, `acosh`, `atanh`, `sign`, `gcd`, `lcm`, `trunc`, `atan2`), 2nd-shift UI row, full-grid layout
 - **Naming** — "Kernel Profile & Telemetry" → "System Status"; "Willpower" → "Habit Builder"
 - **Tests** — expanded calculator engine tests to 90+ cases covering DEG/RAD, new functions, and domain errors
-- **Sidebar** — removed "Active Modules" and "v1.6.0 Modules" category headers
-
-### v1.6.0
-- Added Scientific Calculator, Expense & Bill Pay, Clipboard Vault, 24-Hour Day Planner
-- Implemented global M3 dark theme, AMOLED canvas, M3 NavigationBar
-- BLoC-driven architecture for all new modules
-
-### v1.5.0
-- Added Habit Builder with streak engine, level progression, relapse journaling
-- Android home-screen widget via MethodChannels
+- **Sidebar** — removed "Active Modules" and category headers
 
 ### v1.4.1
 - Added Quick Tasks with inline NLP parser

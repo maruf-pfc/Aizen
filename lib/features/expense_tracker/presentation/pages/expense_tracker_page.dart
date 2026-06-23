@@ -93,14 +93,17 @@ class _ExpenseTrackerPageState extends State<ExpenseTrackerPage>
         BlocBuilder<ExpenseBloc, ExpenseState>(
           builder: (ctx, state) => ExpenseSummaryHeader(state: state),
         ),
-        ExpenseInputBar(
-          controller: _inputController,
-          onSubmit: (val) {
-            if (val.trim().isEmpty) return;
-            AizenHaptics.light();
-            context.read<ExpenseBloc>().add(AddExpenseCommandEvent(val));
-            _inputController.clear();
-          },
+        BlocBuilder<ExpenseBloc, ExpenseState>(
+          builder: (ctx, state) => ExpenseInputBar(
+            controller: _inputController,
+            expenses: state.expenses,
+            onSubmit: (val) {
+              if (val.trim().isEmpty) return;
+              AizenHaptics.light();
+              context.read<ExpenseBloc>().add(AddExpenseCommandEvent(val));
+              _inputController.clear();
+            },
+          ),
         ),
         Expanded(
           child: BlocBuilder<ExpenseBloc, ExpenseState>(

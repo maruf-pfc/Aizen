@@ -48,7 +48,7 @@ class ExpenseSummaryHeader extends StatelessWidget {
             textBaseline: TextBaseline.alphabetic,
             children: [
               Text(
-                _format(state.todaySpend),
+                _format(state.todaySpend, state.expenses.isNotEmpty ? state.expenses.first.currency : '\u{09F3}'),
                 style: TextStyle(
                   color: state.todaySpend < 0
                       ? AizenTheme.accentGreen
@@ -60,7 +60,7 @@ class ExpenseSummaryHeader extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                _format(state.monthSpend),
+                _format(state.monthSpend, state.expenses.isNotEmpty ? state.expenses.first.currency : '\u{09F3}'),
                 style: TextStyle(
                   color: state.monthSpend < 0
                       ? AizenTheme.accentGreen
@@ -82,7 +82,7 @@ class ExpenseSummaryHeader extends StatelessWidget {
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  _billsLine(state),
+                  _billsLine(state, state.expenses.isNotEmpty ? state.expenses.first.currency : '\u{09F3}'),
                   style: const TextStyle(
                     color: AizenTheme.textSecondary,
                     fontSize: 11,
@@ -96,18 +96,18 @@ class ExpenseSummaryHeader extends StatelessWidget {
     );
   }
 
-  String _format(double v) {
-    final sign = v < 0 ? '+' : ''; // refunds are positive for the wallet
-    return '$sign\u{09F3}${v.abs().toStringAsFixed(2)}';
+  String _format(double v, String currency) {
+    final sign = v < 0 ? '+' : '';
+    return '$sign$currency${v.abs().toStringAsFixed(2)}';
   }
 
-  String _billsLine(ExpenseState s) {
+  String _billsLine(ExpenseState s, String currency) {
     final upcoming = s.billsDueWithin(7);
     if (upcoming.isEmpty) return 'No bills due in the next 7 days';
     if (upcoming.length == 1) {
       final b = upcoming.first;
       final d = b.daysUntilDue(DateTime.now());
-      return 'Due soon: ${b.title} (\u{09F3}${b.amount.toStringAsFixed(0)}) — $d day${d == 1 ? '' : 's'}';
+      return 'Due soon: ${b.title} ($currency${b.amount.toStringAsFixed(0)}) — $d day${d == 1 ? '' : 's'}';
     }
     return '${upcoming.length} bills due in the next 7 days';
   }

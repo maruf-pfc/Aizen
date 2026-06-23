@@ -9,6 +9,9 @@ import '../bloc/time_block_bloc.dart';
 import '../bloc/time_block_event.dart';
 import '../bloc/time_block_state.dart';
 import '../widgets/claim_block_sheet.dart';
+import '../../../todo/presentation/bloc/todo_bloc.dart';
+import '../../../todo/presentation/bloc/todo_state.dart';
+import '../../../todo/domain/entities/task.dart';
 
 class TimeBlockerPage extends StatefulWidget {
   const TimeBlockerPage({super.key});
@@ -73,11 +76,15 @@ class _TimeBlockerPageState extends State<TimeBlockerPage> {
       ),
       body: BlocBuilder<TimeBlockBloc, TimeBlockState>(
         builder: (ctx, state) {
-          return Column(
-            children: [
-              _buildHeader(state),
-              Expanded(child: _buildMatrix(ctx, state)),
-            ],
+          return BlocBuilder<TodoBloc, TodoState>(
+            builder: (ctx, todoState) {
+              return Column(
+                children: [
+                  _buildHeader(state),
+                  Expanded(child: _buildMatrix(ctx, state, todoState)),
+                ],
+              );
+            },
           );
         },
       ),
@@ -215,12 +222,22 @@ class _TimeBlockerPageState extends State<TimeBlockerPage> {
     );
   }
 
-  Widget _buildMatrix(BuildContext ctx, TimeBlockState state) {
+  Widget _buildMatrix(BuildContext ctx, TimeBlockState state, TodoState todoState) {
     final now = DateTime.now();
     final isToday = state.selectedDay.year == now.year &&
         state.selectedDay.month == now.month &&
         state.selectedDay.day == now.day;
     final currentHour = now.hour;
+
+    // Filter uncompleted !!1 tasks
+    final highPriorityTasks = todoState.tasks
+        .where((t) => !t.isCompleted && t.priority == 1)
+        .toList();
+
+    // Map empty slots to tasks
+    final emptyHours = List.generate(24, (i) => i)
+        .where((h) => state.blockAt(h) == null)
+        .toList();
 
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 24),
@@ -242,10 +259,25 @@ class _TimeBlockerPageState extends State<TimeBlockerPage> {
             state: state,
           );
         }
+
+        // Find if this hour has a suggestion
+        final emptyIndex = emptyHours.indexOf(hour);
+        Task? suggestedTask;
+        if (emptyIndex != -1 && emptyIndex < highPriorityTasks.length) {
+          suggestedTask = highPriorityTasks[emptyIndex];
+        }
+
         return _buildEmptyHourRow(
           hour: hour,
           isNowRow: isNowRow,
-          onTap: () => _showClaimSheet(ctx, hour, hour + 1, state),
+          suggestedTaskTitle: suggestedTask?.title,
+          onTap: () => _showClaimSheet(
+            ctx,
+            hour,
+            hour + 1,
+            state,
+            suggestedTask?.title ?? '',
+          ),
         );
       },
     );
@@ -255,6 +287,7 @@ class _TimeBlockerPageState extends State<TimeBlockerPage> {
     required int hour,
     required bool isNowRow,
     required VoidCallback onTap,
+    String? suggestedTaskTitle,
   }) {
     return Material(
       color: Colors.transparent,
@@ -295,19 +328,39 @@ class _TimeBlockerPageState extends State<TimeBlockerPage> {
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
-                  isNowRow ? 'Tap to claim this hour' : '—',
-                  style: TextStyle(
-                    color: isNowRow
-                        ? AizenTheme.textSecondary
-                        : AizenTheme.textTertiary,
-                    fontSize: 11,
-                    fontStyle: isNowRow ? FontStyle.italic : FontStyle.normal,
-                  ),
-                ),
+                child: suggestedTaskTitle != null
+                    ? Row(
+                        children: [
+                          const Icon(Icons.lightbulb_outline,
+                              color: AizenTheme.accentAmber, size: 13),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              'Suggest: $suggestedTaskTitle',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: AizenTheme.accentAmber,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Text(
+                        isNowRow ? 'Tap to claim this hour' : '—',
+                        style: TextStyle(
+                          color: isNowRow
+                              ? AizenTheme.textSecondary
+                              : AizenTheme.textTertiary,
+                          fontSize: 11,
+                          fontStyle: isNowRow ? FontStyle.italic : FontStyle.normal,
+                        ),
+                      ),
               ),
               Icon(Icons.add_circle_outline,
-                  size: 14, color: AizenTheme.textTertiary),
+                  size: 14, color: suggestedTaskTitle != null ? AizenTheme.accentAmber : AizenTheme.textTertiary),
             ],
           ),
         ),
@@ -506,14 +559,17 @@ class _TimeBlockerPageState extends State<TimeBlockerPage> {
   }
 
   void _showClaimSheet(
-      BuildContext ctx, int startHour, int endHour, TimeBlockState state) {
+      BuildContext ctx, int startHour, int endHour, TimeBlockState state,
+      [String initialLabel = '']) {
     showModalBottomSheet(
       context: ctx,
       isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (sheetCtx) => ClaimBlockSheet(
         startHour: startHour,
         endHour: endHour,
         existingBlocks: state.blocks,
+        initialLabel: initialLabel,
         onSubmit: (label, color, sH, eH) {
           context.read<TimeBlockBloc>().add(ClaimHoursEvent(
                 startHour: sH,

@@ -1,4 +1,4 @@
-# Clipboard Vault Module (v1.6.0)
+# Clipboard Vault Module (v1.5.0)
 
 The Clipboard Vault module isolates, classifies, and secures copied snippets locally. By using local heuristic classification, the vault automatically parses and organizes clipboard content without sharing sensitive clipboard info externally.
 

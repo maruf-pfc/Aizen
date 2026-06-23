@@ -20,9 +20,9 @@ Welcome to the documentation vault for **Aizen**, a massive, local-first product
 - **[Focus Guardian Engine](features/focus_guardian.md) (v1.4.0)**: Native Android overlay projection and background app blocking.
 - **[Habit Builder Module](features/habit_builder.md) (v1.5.0)**: Habit streak and failure prevention engine with real-time ticking, level rankings, and relapse journaling bottom sheets.
 - **[Scientific Calculator](features/calculator.md) (v1.4.2)**: Scientific calculator utilizing a single-pass recursive descent math parser, featuring DEG/RAD end-to-end integration, a shift state (2nd) for inverse/hyperbolic functions, and standard constants.
-- **[Expense & Bill Tracker](features/expense_tracker.md) (v1.6.0)**: Natural language command-line expense logger with persistent recurring bills, local notification reminders, swipe actions, and Koinly-inspired category analytics.
-- **[Clipboard Vault](features/clipboard_vault.md) (v1.6.0)**: Heuristic clipboard content classifier and localized secure text archive.
-- **[Time Blocker / Day Planner](features/time_blocker.md) (v1.6.0)**: A interactive 24-hour visual grid planner showing elapsed block progress and completed checkmarks.
+- **[Expense & Bill Tracker](features/expense_tracker.md) (v1.5.0)**: Natural language command-line expense logger with persistent recurring bills, local notification reminders, swipe actions, and Koinly-inspired category analytics.
+- **[Clipboard Vault](features/clipboard_vault.md) (v1.5.0)**: Heuristic clipboard content classifier and localized secure text archive.
+- **[Time Blocker / Day Planner](features/time_blocker.md) (v1.5.0)**: A interactive 24-hour visual grid planner showing elapsed block progress and completed checkmarks.
 
 ---
 

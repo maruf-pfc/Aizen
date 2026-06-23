@@ -66,20 +66,21 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       ));
       return;
     }
-    final parsed = result.expense!;
+        final parsed = result.expense!;
     final entry = ExpenseEntry(
       id: _uuid(),
       amount: parsed.amount,
       category: parsed.category,
       note: parsed.note,
       createdAt: DateTime.now(),
+      currency: parsed.currency,
     );
     await _repository.addExpense(entry);
     final updated = [entry, ...state.expenses];
     emit(state.copyWith(
       status: ExpenseStatus.success,
       expenses: updated,
-      message: 'Added ${parsed.amount.abs()} to ${parsed.category}',
+      message: 'Added ${parsed.currency}${parsed.amount.abs().toStringAsFixed(2)} to #${parsed.category}',
     ));
   }
 

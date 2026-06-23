@@ -5,7 +5,7 @@ import 'package:Aizen/features/navigation_hub/presentation/bloc/navigation_event
 import 'package:Aizen/features/navigation_hub/presentation/bloc/navigation_state.dart';
 
 void main() {
-  group('NavigationBloc Tests (v1.6.0)', () {
+  group('NavigationBloc Tests (v1.5.0)', () {
     late NavigationBloc bloc;
 
     setUp(() {
@@ -38,7 +38,7 @@ void main() {
     );
 
     blocTest<NavigationBloc, NavigationState>(
-      'should expose 5 active modules + 4 v1.6.0 modules = 9 items total',
+      'should expose 5 active modules + 4 v1.5.0 modules = 9 items total',
       build: () => bloc,
       act: (bloc) => bloc.add(const LoadNavigationEvent()),
       skip: 1,
@@ -96,19 +96,19 @@ void main() {
     );
 
     blocTest<NavigationBloc, NavigationState>(
-      'should toggle isCollapsed on category toggle event (v1.6.0 group)',
+      'should toggle isCollapsed on category toggle event (v1.5.0 group)',
       build: () {
         bloc.add(const LoadNavigationEvent());
         return bloc;
       },
       skip: 2,
       act: (bloc) =>
-          bloc.add(const ToggleCategoryCollapseEvent('v1_6_modules')),
+          bloc.add(const ToggleCategoryCollapseEvent('v1_5_modules')),
       expect: () => [
         isA<NavigationState>().having(
           (s) =>
-              s.filteredCategories.firstWhere((c) => c.id == 'v1_6_modules').isCollapsed,
-          'v1_6_modules isCollapsed',
+              s.filteredCategories.firstWhere((c) => c.id == 'v1_5_modules').isCollapsed,
+          'v1_5_modules isCollapsed',
           true,
         ),
       ],

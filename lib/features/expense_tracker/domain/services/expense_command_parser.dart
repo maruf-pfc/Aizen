@@ -1,11 +1,10 @@
-// Aizen v1.4.2 — Expense command parser.
+// Aizen v1.5.0 — Expense command parser.
 //
 // Parses terse command-input strings like:
-//   50 #lunch
-//   1200 #internet
-//   45.50 #groceries weekly run
-//   -20 #refund cancelled subscription
-//   30 #coffee at the office
+//   $50 #lunch
+//   ৳1200 #internet
+//   -€20 #refund cancelled subscription
+//   +£100 #salary
 //
 // Output is a structured ParsedExpense record ready to be inserted into
 // the ledger. Designed to be pure-Dart and unit-testable with zero Flutter
@@ -15,15 +14,17 @@ class ParsedExpense {
   final double amount;
   final String category;
   final String note;
+  final String currency;
 
   const ParsedExpense({
     required this.amount,
     required this.category,
     required this.note,
+    this.currency = '\u{09F3}',
   });
 
   @override
-  String toString() => 'ParsedExpense(amount=$amount, category="$category", note="$note")';
+  String toString() => 'ParsedExpense(amount=$amount, category="$category", note="$note", currency="$currency")';
 }
 
 class ExpenseParseResult {
@@ -51,29 +52,29 @@ class ExpenseCommandParser {
       return ExpenseParseResult.failure('Empty input');
     }
 
-    // Match: <amount> [#category] [optional note]
-    // Examples:
-    //   50 #lunch
-    //   45.50 #groceries weekly run
-    //   -20 #refund cancelled
-    //   +100 #salary
+    // Match: [optional currency] [optional sign] [optional currency] <amount> [#category] [optional note]
     final m = RegExp(
-      r'^([+-]?\d+(?:\.\d+)?)(?:\s+|(?=#)|$)(?:#([A-Za-z0-9_\-]+))?\s*(.*)$',
+      r'^([\$৳£€¥]?)\s*([+-]?)\s*([\$৳£€¥]?)\s*(\d+(?:\.\d+)?)(?:\s+|(?=#)|$)(?:#([A-Za-z0-9_\-]+))?\s*(.*)$',
     ).firstMatch(trimmed);
 
     if (m == null) {
-      return ExpenseParseResult.failure('Unrecognised format. Try: 50 #lunch');
+      return ExpenseParseResult.failure('Unrecognised format. Try: \$50 #lunch');
     }
 
-    final amountStr = m.group(1)!;
-    final catRaw = m.group(2);
-    final noteRaw = m.group(3) ?? '';
+    final currency1 = m.group(1) ?? '';
+    final signRaw = m.group(2) ?? '';
+    final currency2 = m.group(3) ?? '';
+    final amountStr = m.group(4)!;
+    final catRaw = m.group(5);
+    final noteRaw = m.group(6) ?? '';
 
-    final amount = double.tryParse(amountStr);
-    if (amount == null) {
+    final currency = currency1.isNotEmpty ? currency1 : (currency2.isNotEmpty ? currency2 : '\u{09F3}');
+    final amountVal = double.tryParse(amountStr);
+    if (amountVal == null) {
       return ExpenseParseResult.failure('Invalid amount: $amountStr');
     }
 
+    final double amount = (signRaw == '-') ? -amountVal : amountVal;
     final category = (catRaw == null || catRaw.isEmpty)
         ? 'general'
         : catRaw.toLowerCase();
@@ -83,13 +84,14 @@ class ExpenseCommandParser {
       amount: amount,
       category: category,
       note: note,
+      currency: currency,
     ));
   }
 
   /// Generate a friendly display string for a ledger row, e.g.
   /// `-৳1200  #internet`
-  String display(double amount, String category) {
+  String display(double amount, String category, [String currency = '\u{09F3}']) {
     final sign = amount < 0 ? '-' : '';
-    return '$sign\u{09F3}${amount.abs().toStringAsFixed(2)}  #$category';
+    return '$sign$currency${amount.abs().toStringAsFixed(2)}  #$category';
   }
 }

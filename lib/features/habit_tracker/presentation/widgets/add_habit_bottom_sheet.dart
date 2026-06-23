@@ -118,6 +118,7 @@ class _AddHabitBottomSheetState extends State<AddHabitBottomSheet> {
                   children: [
                     RadioListTile<bool>(
                       value: true,
+                      // ignore: deprecated_member_use
                       groupValue: _isAutomatic,
                       activeColor: const Color(0xFF7C4DFF),
                       title: const Text(
@@ -128,6 +129,7 @@ class _AddHabitBottomSheetState extends State<AddHabitBottomSheet> {
                         'Counts up days, hours, and seconds clean continuously. Best for breaking bad habits (e.g. quit sugar, caffeine, social media).',
                         style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 11),
                       ),
+                      // ignore: deprecated_member_use
                       onChanged: (val) {
                         if (val != null) setState(() => _isAutomatic = val);
                       },
@@ -135,6 +137,7 @@ class _AddHabitBottomSheetState extends State<AddHabitBottomSheet> {
                     const Divider(height: 1, color: Color(0xFF1E1E20)),
                     RadioListTile<bool>(
                       value: false,
+                      // ignore: deprecated_member_use
                       groupValue: _isAutomatic,
                       activeColor: const Color(0xFF7C4DFF),
                       title: const Text(
@@ -145,6 +148,7 @@ class _AddHabitBottomSheetState extends State<AddHabitBottomSheet> {
                         'Mark complete manually every day. Best for building positive active habits (e.g. read, exercise, meditate).',
                         style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 11),
                       ),
+                      // ignore: deprecated_member_use
                       onChanged: (val) {
                         if (val != null) setState(() => _isAutomatic = val);
                       },

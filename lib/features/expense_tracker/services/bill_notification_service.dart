@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-/// Aizen v1.6.0 — Bill Pay Reminder notification service.
+/// Aizen v1.5.0 — Bill Pay Reminder notification service.
 ///
 /// Uses `flutter_local_notifications` to schedule a persistent local
 /// notification for each due bill. If the plugin is unavailable (e.g.

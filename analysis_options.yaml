@@ -11,7 +11,8 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-    - Aizen_v1.6.0_Production/**
+    - Aizen_v1.5.0_Production/**
+    - tmp/**
 
 
 linter:

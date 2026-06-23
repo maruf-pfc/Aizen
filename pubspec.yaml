@@ -1,5 +1,5 @@
 name: Aizen
-description: "Aizen v1.4.2 — High-density AMOLED M3 mobile productivity ecosystem."
+description: "Aizen v1.5.0 — High-density AMOLED M3 mobile productivity ecosystem."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.4.2+1
+version: 1.5.0+1
 
 environment:
   sdk: ^3.9.0
@@ -41,7 +41,7 @@ dependencies:
   device_info_plus: ^12.4.0
   battery_plus: ^7.0.0
   storage_space: ^1.2.0
-  # v1.6.0 — Bill Pay Reminders local notification channel.
+  # v1.5.0 — Bill Pay Reminders local notification channel.
   flutter_local_notifications: ^18.0.1
   timezone: ^0.9.4
 

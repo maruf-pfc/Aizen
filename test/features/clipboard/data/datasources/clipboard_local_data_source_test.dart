@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:Aizen/features/clipboard/data/datasources/clipboard_local_data_source.dart';
 import 'package:Aizen/features/clipboard/domain/entities/clipboard_item.dart';
 
-/// v1.6.0 — Verify the FIFO eviction strategy of the clipboard vault
+/// v1.5.0 — Verify the FIFO eviction strategy of the clipboard vault
 /// (max 50 items, pinned items preserved).
 void main() {
   late SharedPreferences prefs;

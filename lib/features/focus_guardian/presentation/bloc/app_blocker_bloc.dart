@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'app_blocker_event.dart';
 import 'app_blocker_state.dart';
 
-/// Aizen v1.6.0 — App Blocker threshold/state manager.
+/// Aizen v1.5.0 — App Blocker threshold/state manager.
 ///
 /// Pure-Dart state container for the Focus Guardian. Decoupled from the
 /// SharedPreferences persistence layer so it can be unit-tested in

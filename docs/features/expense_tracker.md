@@ -1,4 +1,4 @@
-# Expense & Bill Pay Module (v1.6.0)
+# Expense & Bill Pay Module (v1.5.0)
 
 Aizen's Expense & Bill Pay module provides a low-overhead, command-driven approach to tracking expenses alongside persistent, local notification-based recurring bill reminders and Koinly-inspired category analytics.
 

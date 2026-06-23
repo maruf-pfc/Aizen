@@ -7,6 +7,7 @@ class ExpenseEntry extends Equatable {
   final String category;
   final String note;
   final DateTime createdAt;
+  final String currency;
 
   const ExpenseEntry({
     required this.id,
@@ -14,6 +15,7 @@ class ExpenseEntry extends Equatable {
     required this.category,
     required this.note,
     required this.createdAt,
+    this.currency = '\u{09F3}',
   });
 
   ExpenseEntry copyWith({
@@ -22,6 +24,7 @@ class ExpenseEntry extends Equatable {
     String? category,
     String? note,
     DateTime? createdAt,
+    String? currency,
   }) {
     return ExpenseEntry(
       id: id ?? this.id,
@@ -29,6 +32,7 @@ class ExpenseEntry extends Equatable {
       category: category ?? this.category,
       note: note ?? this.note,
       createdAt: createdAt ?? this.createdAt,
+      currency: currency ?? this.currency,
     );
   }
 
@@ -39,6 +43,7 @@ class ExpenseEntry extends Equatable {
       category: json['category'] as String,
       note: json['note'] as String? ?? '',
       createdAt: DateTime.parse(json['createdAt'] as String),
+      currency: json['currency'] as String? ?? '\u{09F3}',
     );
   }
 
@@ -48,8 +53,9 @@ class ExpenseEntry extends Equatable {
         'category': category,
         'note': note,
         'createdAt': createdAt.toIso8601String(),
+        'currency': currency,
       };
 
   @override
-  List<Object?> get props => [id, amount, category, note, createdAt];
+  List<Object?> get props => [id, amount, category, note, createdAt, currency];
 }

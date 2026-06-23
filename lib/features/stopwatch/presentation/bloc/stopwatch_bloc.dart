@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/services.dart';
 import '../../domain/entities/lap.dart';
 import '../../domain/entities/stopwatch_state.dart';
 import '../../domain/usecases/clear_stopwatch_data.dart';
@@ -16,6 +17,8 @@ class StopwatchBloc extends Bloc<StopwatchEvent, StopwatchState> {
   final SaveLaps saveLaps;
   final ClearStopwatchData clearStopwatchData;
 
+  static const _channel = MethodChannel('com.aizen.app/hardware_bridge');
+
   StopwatchBloc({
     required this.getStopwatchState,
     required this.saveStopwatchState,
@@ -28,6 +31,17 @@ class StopwatchBloc extends Bloc<StopwatchEvent, StopwatchState> {
     on<PauseStopwatchEvent>(_onPauseStopwatch);
     on<ResetStopwatchEvent>(_onResetStopwatch);
     on<AddLapEvent>(_onAddLap);
+
+    // Register native callback listener
+    try {
+      _channel.setMethodCallHandler((call) async {
+        if (call.method == 'onStopwatchAction') {
+          add(const LoadStopwatchDataEvent());
+        }
+      });
+    } catch (_) {
+      // Ignored in unit test context where ServicesBinding is not initialized
+    }
   }
 
   Future<void> _onLoadStopwatchData(
@@ -92,6 +106,13 @@ class StopwatchBloc extends Bloc<StopwatchEvent, StopwatchState> {
       isRunning: true,
       startTime: now,
     ));
+
+    try {
+      await _channel.invokeMethod('startStopwatchService', {
+        'isRunning': true,
+        'elapsedTimeMs': state.elapsedTime.inMilliseconds,
+      });
+    } catch (_) {}
   }
 
   Future<void> _onPauseStopwatch(
@@ -117,6 +138,13 @@ class StopwatchBloc extends Bloc<StopwatchEvent, StopwatchState> {
       isRunning: false,
       startTime: null,
     ));
+
+    try {
+      await _channel.invokeMethod('startStopwatchService', {
+        'isRunning': false,
+        'elapsedTimeMs': totalElapsed.inMilliseconds,
+      });
+    } catch (_) {}
   }
 
   Future<void> _onResetStopwatch(
@@ -125,6 +153,9 @@ class StopwatchBloc extends Bloc<StopwatchEvent, StopwatchState> {
   ) async {
     emit(const StopwatchState(status: StopwatchStatus.initial));
     await clearStopwatchData();
+    try {
+      await _channel.invokeMethod('stopStopwatchService');
+    } catch (_) {}
   }
 
   Future<void> _onAddLap(
@@ -178,5 +209,12 @@ class StopwatchBloc extends Bloc<StopwatchEvent, StopwatchState> {
       isRunning: state.status == StopwatchStatus.running,
       startTime: newStartTime,
     ));
+
+    try {
+      await _channel.invokeMethod('startStopwatchService', {
+        'isRunning': state.status == StopwatchStatus.running,
+        'elapsedTimeMs': newBaseElapsedTime.inMilliseconds,
+      });
+    } catch (_) {}
   }
 }

@@ -17,7 +17,7 @@ import 'package:Aizen/features/settings/domain/usecases/export_data.dart';
 import 'package:Aizen/features/settings/domain/usecases/import_data.dart';
 import 'package:Aizen/core/theme/aizen_theme.dart';
 
-/// v1.6.0 — Widget performance test for the navigation hub sidebar.
+/// v1.5.0 — Widget performance test for the navigation hub sidebar.
 ///
 /// Verifies that the drawer uses a lazy `ListView.builder` so that
 /// off-screen items are NOT eagerly inflated into memory. This protects

@@ -18,7 +18,7 @@ void main() {
     test('https URL with query string', () {
       expect(
           classifier.classify(
-              'https://www.google.com/search?q=aizen+v1.6.0&source=hp'),
+              'https://www.google.com/search?q=aizen+v1.5.0&source=hp'),
           ClipboardKind.link);
     });
 

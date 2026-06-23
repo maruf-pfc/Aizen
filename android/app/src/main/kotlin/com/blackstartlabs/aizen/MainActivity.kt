@@ -18,12 +18,16 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.aizen.app/hardware_bridge"
+    private var flutterChannel: MethodChannel? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        StopwatchService.mainActivityInstance = this
         scheduleDailyNotification()
 
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
+        val channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
+        flutterChannel = channel
+        channel.setMethodCallHandler { call, result ->
             when (call.method) {
                 "updateHabitWidget" -> {
                     try {
@@ -74,6 +78,24 @@ class MainActivity : FlutterActivity() {
                         stopService(Intent(this, FocusBlockerService::class.java))
                     }
                     
+                    result.success(true)
+                }
+                "startStopwatchService" -> {
+                    val isRunning = call.argument<Boolean>("isRunning") ?: false
+                    val elapsedTimeMs = call.argument<Long>("elapsedTimeMs") ?: 0L
+                    val intent = Intent(this, StopwatchService::class.java).apply {
+                        putExtra("isRunning", isRunning)
+                        putExtra("elapsedTimeMs", elapsedTimeMs)
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(intent)
+                    } else {
+                        startService(intent)
+                    }
+                    result.success(true)
+                }
+                "stopStopwatchService" -> {
+                    stopService(Intent(this, StopwatchService::class.java))
                     result.success(true)
                 }
                 "getKernelTelemetry" -> {
@@ -264,5 +286,14 @@ class MainActivity : FlutterActivity() {
             android.app.AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
+    }
+
+    fun notifyStopwatchAction(action: String) {
+        flutterChannel?.invokeMethod("onStopwatchAction", action)
+    }
+
+    override fun onDestroy() {
+        StopwatchService.mainActivityInstance = null
+        super.onDestroy()
     }
 }

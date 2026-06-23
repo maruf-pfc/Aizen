@@ -1,4 +1,4 @@
-// Aizen v1.6.0 — Scientific Calculator Engine.
+// Aizen v1.5.0 — Scientific Calculator Engine.
 //
 // Pure-Dart, memory-efficient recursive-descent parser supporting:
 //   • +, -, *, /, %, ^ (power)
@@ -359,7 +359,7 @@ class _Parser {
           throw _CalcError('fact() requires a non-negative integer');
         }
         if (n > 170) throw _CalcError('fact(): overflow (max input 170)');
-        return _factorial(n.toInt()).toDouble();
+        return _factorial(n.toInt());
       // ── Variadic stats ──────────────────────────────────────────────
       case 'max':
         if (argc < 1) throw _CalcError('max() needs at least 1 argument');
@@ -381,9 +381,9 @@ class _Parser {
     }
   }
 
-  static int _factorial(int n) {
-    if (n == 0 || n == 1) return 1;
-    var result = 1;
+  static double _factorial(int n) {
+    if (n == 0 || n == 1) return 1.0;
+    var result = 1.0;
     for (var i = 2; i <= n; i++) {
       result *= i;
     }

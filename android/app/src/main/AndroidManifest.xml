@@ -18,6 +18,14 @@
             <property android:name="android.app.PROPERTY_SPECIAL_USE_DESCRIPTION_KEY" android:value="Background app monitoring and overlay projection for local-first productivity lockout."/>
         </service>
 
+        <service
+            android:name=".StopwatchService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_DESCRIPTION_KEY" android:value="Persistent stopwatch notification bar tracking."/>
+        </service>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

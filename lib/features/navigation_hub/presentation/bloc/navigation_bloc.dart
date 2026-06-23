@@ -39,13 +39,13 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         ],
       ),
       ModuleCategory(
-        id: 'v1_6_modules',
-        name: 'v1.6.0 Modules',
+        id: 'v1_5_modules',
+        name: 'v1.5.0 Modules',
         items: [
-          const NavigationItem(id: 'calculator', title: 'Scientific Calculator', icon: Icons.calculate, category: 'v1_6_modules', badge: 'New'),
-          const NavigationItem(id: 'expense_tracker', title: 'Expense & Bills', icon: Icons.account_balance_wallet, category: 'v1_6_modules', badge: 'New'),
-          const NavigationItem(id: 'clipboard_vault', title: 'Clipboard Vault', icon: Icons.content_paste, category: 'v1_6_modules', badge: 'New'),
-          const NavigationItem(id: 'time_blocker', title: 'Day Planner', icon: Icons.view_agenda, category: 'v1_6_modules', badge: 'New'),
+          const NavigationItem(id: 'calculator', title: 'Scientific Calculator', icon: Icons.calculate, category: 'v1_5_modules', badge: 'New'),
+          const NavigationItem(id: 'expense_tracker', title: 'Expense & Bills', icon: Icons.account_balance_wallet, category: 'v1_5_modules', badge: 'New'),
+          const NavigationItem(id: 'clipboard_vault', title: 'Clipboard Vault', icon: Icons.content_paste, category: 'v1_5_modules', badge: 'New'),
+          const NavigationItem(id: 'time_blocker', title: 'Day Planner', icon: Icons.view_agenda, category: 'v1_5_modules', badge: 'New'),
         ],
       ),
     ];

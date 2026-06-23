@@ -4,7 +4,7 @@ import 'package:Aizen/features/focus_guardian/presentation/bloc/app_blocker_bloc
 import 'package:Aizen/features/focus_guardian/presentation/bloc/app_blocker_event.dart';
 import 'package:Aizen/features/focus_guardian/presentation/bloc/app_blocker_state.dart';
 
-/// v1.6.0 — Tests for the App Blocker threshold state mutations.
+/// v1.5.0 — Tests for the App Blocker threshold state mutations.
 void main() {
   group('AppBlockerBloc — threshold updates', () {
     late AppBlockerBloc bloc;

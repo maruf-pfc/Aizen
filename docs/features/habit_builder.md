@@ -25,10 +25,17 @@ Each card displays a progress bar indicating how close the user is to the next l
 
 ### 3. Failure Analysis & Relapse Journaling
 * **Slide-Up Bottom Sheet**: Triggers a premium Material 3 bottom sheet for relapse logging.
-* **Metadata Analysis**: Logs root cause category (Stress, Fatigue, Boredom, etc.), trigger context, severity level (1-5), and post-relapse reflection notes.
+* **Metadata Analysis**: Logs root cause category (Stress, Fatigue, Boredom, etc.), trigger context, stress/anxiety level (1-5), and post-relapse reflection notes.
 * **Failure Ledger**: Renders a chronicled timeline history of past attempts to identify behavior patterns.
 
-### 4. Android Home-Screen Widget Integration
+### 4. Post-Relapse Behavioral Triage Flow
+* When the user reports a habit relapse (by submitting a relapse log), they are immediately transitioned into a context-sensitive **4-7-8 Breathing Triage Visualizer** directly within the sheet.
+* Gathers the logged stress level and suggests tailored cycles:
+  - **Stress level >= 4**: 4 cycles of 4-7-8 breathing.
+  - **Stress level < 4**: 2 cycles of 4-7-8 breathing.
+* The visualizer features a lung-expansion simulator (scaling circle matching phase timing: 4s inhale, 7s hold, 8s exhale) with context-colored accents (Cyan, Purple, Amber) and step instructions to down-regulate the nervous system instantly.
+
+### 5. Android Home-Screen Widget Integration
 * Uses Flutter's AppWidget Provider bridge (`com.aizen.app/hardware_bridge`) to trigger updates on the native Android system launcher.
 * Displays current habit streak names and days clean directly on the home screen.
 

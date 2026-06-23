@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../domain/entities/clipboard_item.dart';
 
-/// Aizen v1.6.0 — Clipboard Vault local data source.
+/// Aizen v1.5.0 — Clipboard Vault local data source.
 ///
 /// Backed by a single SharedPreferences JSON blob. Enforces a hard FIFO
 /// cap of [maxItems] (default 50) to protect low-RAM hardware from

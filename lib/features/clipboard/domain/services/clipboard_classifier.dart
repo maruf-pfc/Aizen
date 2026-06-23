@@ -1,4 +1,4 @@
-// Aizen v1.6.0 — Clipboard content classifier.
+// Aizen v1.5.0 — Clipboard content classifier.
 //
 // Pure-Dart content-based categorization of a copied string into one of
 // Links, Snippets, or Plain Text. Heuristics are intentionally cheap
