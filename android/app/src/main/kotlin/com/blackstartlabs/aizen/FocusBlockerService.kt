@@ -245,7 +245,7 @@ class FocusBlockerService : Service() {
         if (isOverlayShown) return
 
         try {
-            val layoutParams = WindowManager.LayoutParams().apply {
+            val windowParams = WindowManager.LayoutParams().apply {
                 type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                 } else {
@@ -345,7 +345,7 @@ class FocusBlockerService : Service() {
             )
             overlayView?.addView(container, frameParams)
 
-            windowManager?.addView(overlayView, layoutParams)
+            windowManager?.addView(overlayView, windowParams)
             isOverlayShown = true
             overlayShownTime = System.currentTimeMillis()
             Log.d(TAG, "Overlay injected successfully via WindowManager.")
